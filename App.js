@@ -13,9 +13,9 @@ import {
   View,
   Button
 } from 'react-native';
-import Map from './src/components/Map/Map';
-import Home from './src/components/Home/Home';
-import Profile from './src/components/Profile/Profile';
+import Map from './src/core/components/Map/Map';
+import Home from './src/core/components/Home/Home';
+import Profile from './src/core/components/Profile/Profile';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
 
