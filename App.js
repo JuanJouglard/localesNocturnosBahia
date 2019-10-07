@@ -26,8 +26,8 @@ class App extends Component {
     PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       {
+        'message': 'Example App access to your location ',
         'title': 'Example App',
-        'message': 'Example App access to your location '
       }
     )
   }
@@ -55,21 +55,21 @@ const tabNavigator = createBottomTabNavigator({
 });
 
 const style = StyleSheet.create({
+    button: {
+      flex: 1
+    },
     full: {
       alignItems: 'stretch',
       flex:1
     },
-    navigation: {
-      flexDirection: 'row',
-      flex: 1,
-      justifyContent: 'center',
-    },
-    button: {
-      flex: 1
-    },
     map: {
       flex: 8
-    }
+    },
+    navigation: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
 });
 
 export default createAppContainer(tabNavigator);

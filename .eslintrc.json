@@ -21,6 +21,10 @@
         "react"
     ],
     "rules": {
-        "eqeqeq":"error"
+        "eqeqeq": "error",
+        "no-unused-vars": "warn",
+        "no-confusing-arrow": "error",
+        "arrow-spacing": "warn",
+        "sort-keys": "warn"
     }
 }
