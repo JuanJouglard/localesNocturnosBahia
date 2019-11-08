@@ -1,5 +1,3 @@
-import MapObject from './mapObject';
-
 export class Marker {
 
     coordinate;
@@ -9,6 +7,7 @@ export class Marker {
     icon;
     image;
     tracksViewChanges = false;
+    draggable;
 
     constructor(props) {
         Object.assign(this, props);

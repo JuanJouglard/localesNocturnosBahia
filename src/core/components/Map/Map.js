@@ -1,9 +1,9 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text } from 'react-native';
-import { MarkersFactory } from '../../core/factories/markersFactories';
-import { MapView, Marker } from 'react-native-maps';
+import { StyleSheet, Text, View } from 'react-native';
+import  MapView from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
+import ObjectsOnMap from '../../../shared/components/objectsOnMap/objectsOnMap';
 
 export default class Map extends Component {
 
@@ -13,40 +13,55 @@ export default class Map extends Component {
         showsUserLocation: true,
     };
 
-    markersFactory = new MarkersFactory();
     constructor(props) {
         super(props);
         this.state = {
             latitude: null,
             latitudeDelta: 0.0922,
             longitude: null,
-            longitudeDelta: 0.0421,
+			longitudeDelta: 0.0421,
+			selectedMarker: 'Hola'
         }
-    }
+	}
+
+	selectMarker(marker) {
+		console.log(marker);
+	}
     
     render() {
         Geolocation.watchPosition(
             (position) => {
                 this.setState({...position.coords});
-            },
-            console.log
+            }
         );
         return this.state.longitude !== null ? (
-            <MapView
-                style={styles.mapView}
-                {...this.mapConfiguration}
-                region = {this.state}
-                onRegionChange = {console.log}
-            >
-                <Marker {...this.markersFactory.markersForMap()}></Marker>
-            </MapView>
+			<View style={styles.mapContainer}>
+				<MapView
+					style={styles.mapView}
+					{...this.mapConfiguration}
+					region = {this.state}
+				>
+					<ObjectsOnMap onMarkerSelect={this.selectMarker}>
+
+					</ObjectsOnMap>
+				</MapView>
+				<View style={styles.locationInformation}>
+					<Text>{this.state.selectedMarker}</Text>
+				</View>
+			</View>
         ): <Text>No  Coords</Text>;
     }
 }
 
 const styles = StyleSheet.create({
+	locationInformation: {
+		flex: 2
+	},
+	mapContainer: {
+		flex: 1,
+	},
     mapView: {
-        flex: 1
+		flex: 4,
     }
 });
     
