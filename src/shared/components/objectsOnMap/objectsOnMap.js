@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Marker } from 'react-native-maps';
 import { MarkersFactory } from '../../../core/factories/markersFactories';
-import firestore from '@react-native-firebase/firestore';
+import { PlacesService } from '../../../core/services.js/places';
 
 export default class ObjectsOnMap extends Component {
     
     markersFactory = new MarkersFactory();
+    placesService;
 
     constructor(props) {
         super(props);
@@ -16,9 +17,8 @@ export default class ObjectsOnMap extends Component {
     }
 
     componentDidMount() {
-		firestore()
-		.collection('Places')
-			.get().then(
+        this.placesService = PlacesService.getInstance();
+		this.placesService.getPlaces().then(
 				(documents) => {
                     this.setState({places: documents.docs});
 				}
