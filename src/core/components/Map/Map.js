@@ -4,11 +4,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import  MapView from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import ObjectsOnMap from '../../../shared/components/objectsOnMap/objectsOnMap';
+import { customStyle } from '../../configurations/map/customStyle';
 
 export default class Map extends Component {
 
     mapConfiguration = {
-        mapType: 'standard',
+		mapType: 'standard',
 		showsTraffic: true,
         showsUserLocation: true,
     };
@@ -23,6 +24,8 @@ export default class Map extends Component {
 			selectedMarker: 'Hola'
         }
 	}
+
+	
 
 	selectMarker(marker) {
 		console.log(marker);
@@ -40,9 +43,9 @@ export default class Map extends Component {
 					style={styles.mapView}
 					{...this.mapConfiguration}
 					region = {this.state}
+					customMapStyle= {customStyle}
 				>
 					<ObjectsOnMap onMarkerSelect={this.selectMarker}>
-
 					</ObjectsOnMap>
 				</MapView>
 				<View style={styles.locationInformation}>
