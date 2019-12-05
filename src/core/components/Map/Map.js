@@ -27,8 +27,8 @@ export default class Map extends Component {
 
 	
 
-	selectMarker(marker) {
-		console.log(marker);
+	selectMarker = (marker) => {
+		this.setState({selectedMarker: marker.id});
 	}
     
     render() {
