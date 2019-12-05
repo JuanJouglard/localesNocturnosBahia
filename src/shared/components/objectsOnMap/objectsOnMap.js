@@ -11,6 +11,7 @@ export default class ObjectsOnMap extends Component {
 
     constructor(props) {
         super(props);
+        console.log('Func',props.onMarkerSelect);
         this.state = {
             places: []
         }
@@ -25,8 +26,8 @@ export default class ObjectsOnMap extends Component {
 			);
    }
     
-	clickMarker(e) {
-        console.log(e.nativeEvent);
+	clickMarker = (e) => {
+        console.log('Event');
 		this.props.onMarkerSelect(e.nativeEvent);
     }
 
@@ -37,6 +38,7 @@ export default class ObjectsOnMap extends Component {
                 (place) => {
                     console.log('Place',place.data().location);
                     return (<Marker
+                                identifier={place.data().id.toString()}
                                 onPress={this.clickMarker}
                                 key={place.data().name}
                                 coordinate= {{
