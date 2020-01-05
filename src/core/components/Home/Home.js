@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet,FlatList, View } from 'react-native';
 import { PlacesService } from '../../services.js/places';
 import ListEntry from '../../../shared/components/listEntry/listEntry';
-
+import { TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
 export default class Home extends Component {
     
     placesService;
@@ -37,16 +38,27 @@ export default class Home extends Component {
     }
 
     listEntry = ({item}) => {
-        return <ListEntry
+        return (
+            <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Local', {
+                    itemId: item.data().id
+                })}
+            >
+                <ListEntry
                     title={item.data().name}
                     description={item.data().address}
                     image=''
                 ></ListEntry>
+            </TouchableOpacity>)
     }
 
     separator =() => {
         return (<View style={style.separator}></View>)
     }
+}
+
+Home.propTypes = {
+    navigation: PropTypes.object.isRequired
 }
 
 const style = StyleSheet.create({

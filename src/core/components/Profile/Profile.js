@@ -47,8 +47,6 @@ const style = StyleSheet.create({
     },
     layout: {
         alignItems: 'center',
-        borderColor:'black',
-        borderWidth: 5,
         height: '100%',
         justifyContent: 'space-around',
         width: '100%',
