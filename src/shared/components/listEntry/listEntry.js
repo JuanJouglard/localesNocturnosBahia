@@ -44,7 +44,7 @@ const style = StyleSheet.create({
         marginLeft: 10
     },
     title: {
-        fontSize: 17,
-        fontWeight: 'bold'
+        fontFamily: 'Lobster-Regular',
+        fontSize: 25
     }
 }); 
