@@ -1,0 +1,1 @@
+export const firebaseUrl = 'https://us-central1-proyectoiaw-757a3.cloudfunctions.net/';
