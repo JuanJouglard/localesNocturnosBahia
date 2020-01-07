@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Marker } from 'react-native-maps';
 import { MarkersFactory } from '../../../core/factories/markersFactories';
 import { PlacesService } from '../../../core/services.js/places';
+import { Image } from 'react-native';
+import * as images from '../../../core/images/images';
+import { StyleSheet } from 'react-native';
 
 export default class ObjectsOnMap extends Component {
     
@@ -11,7 +14,6 @@ export default class ObjectsOnMap extends Component {
 
     constructor(props) {
         super(props);
-        console.log('Func',props.onMarkerSelect);
         this.state = {
             places: []
         }
@@ -27,7 +29,6 @@ export default class ObjectsOnMap extends Component {
    }
     
 	clickMarker = (e) => {
-        console.log('Event');
 		this.props.onMarkerSelect(e.nativeEvent);
     }
 
@@ -36,7 +37,6 @@ export default class ObjectsOnMap extends Component {
         if (this.state.places !== []) {
             places = this.state.places.map(
                 (place) => {
-                    console.log('Place',place.data().location);
                     return (<Marker
                                 identifier={place.data().id.toString()}
                                 onPress={this.clickMarker}
@@ -46,6 +46,13 @@ export default class ObjectsOnMap extends Component {
                                     longitude: place.data().location.longitude}}
                                 description= {place.data().type}
                                 title={place.data().name}>
+                                <Image
+                                    source={images[place.data().type+'IMAGE']}
+                                    style={{
+                                        height: this.props.zoomLevel*3,
+                                        width: this.props.zoomLevel*3
+                                    }}
+                                ></Image>
                             </Marker>);
                 }
             );
@@ -56,5 +63,6 @@ export default class ObjectsOnMap extends Component {
 }
 
 ObjectsOnMap.propTypes = {
-    onMarkerSelect: PropTypes.func
+    onMarkerSelect: PropTypes.func,
+    zoomLevel:  PropTypes.number
 };

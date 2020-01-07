@@ -11,7 +11,7 @@ export default class ListEntry extends Component {
     render() {
         return (
             <View style={style.container}>
-                <Image style={style.image} source={require('../../../../assets/emojis/beer.png')}></Image>
+                <Image style={style.image} source={this.props.image}></Image>
                 <View style={style.text}>
                     <Text style={style.title}>{this.props.title}</Text>
                     <Text>{this.props.description}</Text>
@@ -24,7 +24,7 @@ export default class ListEntry extends Component {
 
 ListEntry.propTypes = {
     description: PropTypes.string,
-    image: PropTypes.string,
+    image: PropTypes.number,
     title: PropTypes.string,
 }
 
@@ -41,6 +41,7 @@ const style = StyleSheet.create({
         width: 60,
     },
     text: {
+        alignItems: "center",
         marginLeft: 10
     },
     title: {
