@@ -28,7 +28,7 @@ export default class Map extends Component {
 	
 
 	selectMarker = (marker) => {
-		this.setState({selectedMarker: marker.id});
+		console.log(this.state);
 	}
     
     render() {
@@ -45,7 +45,12 @@ export default class Map extends Component {
 					region = {this.state}
 					customMapStyle= {customStyle}
 				>
-					<ObjectsOnMap onMarkerSelect={this.selectMarker}>
+					<ObjectsOnMap onMarkerSelect={this.selectMarker}
+							zoomLevel={
+								Math.round(
+								Math.
+									log(360/this.state.longitudeDelta)/Math.LN2)
+							}>
 					</ObjectsOnMap>
 				</MapView>
 				<View style={styles.locationInformation}>

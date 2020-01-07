@@ -4,6 +4,8 @@ import { PlacesService } from '../../services.js/places';
 import ListEntry from '../../../shared/components/listEntry/listEntry';
 import { TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
+import * as images from '../../../core/images/images';
+
 export default class Home extends Component {
     
     placesService;
@@ -47,7 +49,7 @@ export default class Home extends Component {
                 <ListEntry
                     title={item.data().name}
                     description={item.data().address}
-                    image=''
+                    image={images[item.data().type + 'IMAGE']}
                 ></ListEntry>
             </TouchableOpacity>)
     }
