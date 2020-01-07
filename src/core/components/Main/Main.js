@@ -6,7 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import LocalDetail from '../../../shared/components/localDetail/localDetail';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHome, faMap, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faMapPin, faUser } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 
 const tabNavigator = createBottomTabNavigator({
@@ -29,10 +29,10 @@ const tabNavigator = createBottomTabNavigator({
       // eslint-disable-next-line react/display-name
       tabBarIcon: ({focused}) => { 
         if (focused) {
-          return <FontAwesomeIcon color='#464646' icon={faMap} size={30}/>;
+          return <FontAwesomeIcon color='#464646' icon={faMapPin} size={30}/>;
         }
         else {
-          return <FontAwesomeIcon color='#C6C6C5' icon={faMap} size={30}/>;
+          return <FontAwesomeIcon color='#C6C6C5' icon={faMapPin} size={30}/>;
         }
       }
     },
