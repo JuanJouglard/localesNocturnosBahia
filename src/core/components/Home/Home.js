@@ -43,7 +43,7 @@ export default class Home extends Component {
         return (
             <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Local', {
-                    itemId: item.data().id
+                    item: item.data(),
                 })}
             >
                 <ListEntry
