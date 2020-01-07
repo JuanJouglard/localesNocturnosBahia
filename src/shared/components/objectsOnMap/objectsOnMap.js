@@ -49,8 +49,8 @@ export default class ObjectsOnMap extends Component {
                                 <Image
                                     source={images[place.data().type+'IMAGE']}
                                     style={{
-                                        height: this.props.zoomLevel*3,
-                                        width: this.props.zoomLevel*3
+                                        height: this.props.zoomLevel*2,
+                                        width: this.props.zoomLevel*2
                                     }}
                                 ></Image>
                             </Marker>);
