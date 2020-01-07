@@ -36,9 +36,7 @@ export default class App extends Component {
       const userData = await GoogleSignin.signIn();
       const credential = firebase.auth.
       GoogleAuthProvider.credential(userData.idToken, userData.accessToken);
-      console.log('Credential',credential);
-      const user=await firebase.auth().signInWithCredential(credential);
-      console.log('isNewUser',user);
+      await firebase.auth().signInWithCredential(credential);
     } catch (e) {
       console.log('error');
       console.error(e);

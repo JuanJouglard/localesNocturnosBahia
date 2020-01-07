@@ -9,64 +9,70 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faMap, faUser } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 
-const HomeNavigator = createStackNavigator({
-    Home,
-    Local: {
-      screen: LocalDetail
-    }
-  },
-  {
-    initialRouteName: 'Home'
-  });
-
 const tabNavigator = createBottomTabNavigator({
-    Home: {
-      navigationOptions: {
-        // eslint-disable-next-line react/display-name
+  Home: {
+    navigationOptions: {
+      // eslint-disable-next-line react/display-name
+    tabBarIcon: ({focused}) => { 
+      if (focused) {
+        return <FontAwesomeIcon color='#464646' icon={faHome} size={30}/>;
+      }
+      else {
+        return <FontAwesomeIcon color='#C6C6C5' icon={faHome} size={30}/>;
+      }
+    }
+    },
+    screen: Home,
+  },
+  Map: {
+    navigationOptions: {
+      // eslint-disable-next-line react/display-name
       tabBarIcon: ({focused}) => { 
         if (focused) {
-          return <FontAwesomeIcon color='#464646' icon={faHome} size={30}/>;
+          return <FontAwesomeIcon color='#464646' icon={faMap} size={30}/>;
         }
         else {
-          return <FontAwesomeIcon color='#C6C6C5' icon={faHome} size={30}/>;
+          return <FontAwesomeIcon color='#C6C6C5' icon={faMap} size={30}/>;
         }
       }
-      },
-      screen: HomeNavigator,
     },
-    Map: {
-      navigationOptions: {
-        // eslint-disable-next-line react/display-name
-        tabBarIcon: ({focused}) => { 
-          if (focused) {
-            return <FontAwesomeIcon color='#464646' icon={faMap} size={30}/>;
-          }
-          else {
-            return <FontAwesomeIcon color='#C6C6C5' icon={faMap} size={30}/>;
-          }
+    screen: Map
+  },
+  Profile: {
+    navigationOptions: {
+      // eslint-disable-next-line react/display-name
+      tabBarIcon: ({focused}) => { 
+        if (focused) {
+          return <FontAwesomeIcon color='#464646' icon={faUser} size={30}/>;
         }
-      },
-      screen: Map
+        else {
+          return <FontAwesomeIcon color='#C6C6C5' icon={faUser} size={30}/>;
+        }
+      }
     },
-    Profile: {
-      navigationOptions: {
-        // eslint-disable-next-line react/display-name
-        tabBarIcon: ({focused}) => { 
-          if (focused) {
-            return <FontAwesomeIcon color='#464646' icon={faUser} size={30}/>;
-          }
-          else {
-            return <FontAwesomeIcon color='#C6C6C5' icon={faUser} size={30}/>;
-          }
-        }
-      },
-      screen: Profile
+    screen: Profile
+  }
+},
+{
+  tabBarOptions: {
+    showLabel: false
+  }
+});
+
+const HomeNavigator = createStackNavigator({
+    Local: {
+      screen: LocalDetail
+    },
+    Main: {
+      screen: tabNavigator
     }
   },
   {
-    tabBarOptions: {
-      showLabel: false
-    }
+    initialRouteName: 'Main'
   });
+
+ 
   
-export default createAppContainer(tabNavigator); 
+
+  
+export default createAppContainer(HomeNavigator); 
