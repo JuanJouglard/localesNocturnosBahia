@@ -1,10 +1,11 @@
+//@ts-check
 import Map from '../Map/Map';
 import Home from '../Home/Home';
 import Profile from '../Profile/Profile';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
-import LocalDetail from '../../../shared/components/localDetail/localDetail';
+import LocalDetail from '../../../localDetail/components/localDetail';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faHome, faMapPin, faUser} from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
