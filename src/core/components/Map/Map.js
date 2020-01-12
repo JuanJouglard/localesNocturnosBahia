@@ -1,10 +1,10 @@
+//@ts-check
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import MapView from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import ObjectsOnMap from '../../../shared/components/objectsOnMap/objectsOnMap';
-import {customStyle} from '../../configurations/map/customStyle';
-import {PropTypes} from 'prop-types';
+import PropTypes from 'prop-types';
+import CustomMap from '../../../shared/components/map/customMap';
+import {PlacesService} from '../../../core/services.js/places';
 
 export default class Map extends Component {
   mapConfiguration = {
@@ -12,45 +12,52 @@ export default class Map extends Component {
     showsTraffic: true,
     showsUserLocation: true,
   };
+  placesService;
 
   constructor(props) {
     super(props);
     this.state = {
-      latitude: null,
-      latitudeDelta: 0.0922,
-      longitude: null,
-      longitudeDelta: 0.0421,
-      selectedMarker: 'Hola',
+      markers: [],
+      region: {
+        latitude: null,
+
+        longitude: null,
+      },
     };
   }
 
+  componentDidMount() {
+    this.placesService = PlacesService.getInstance();
+    this.placesService.getPlaces().then(documents => {
+      this.setState({markers: documents.docs.map(marker => marker.data())});
+    });
+  }
+
   selectMarker = marker => {
-    console.log(marker);
     this.props.navigation.navigate('Local', {
       item: marker,
     });
   };
 
   render() {
+    console.log('State', this.state);
     Geolocation.watchPosition(position => {
-      this.setState({...position.coords});
+      this.setState({region: position.coords});
     });
-    return this.state.longitude !== null ? (
+    return this.state.region.longitude !== null ? (
       <View style={styles.mapContainer}>
-        <MapView
+        <CustomMap
           style={styles.mapView}
-          {...this.mapConfiguration}
-          region={this.state}
-          customMapStyle={customStyle}>
-          <ObjectsOnMap
-            onMarkerSelect={this.selectMarker}
-            zoomLevel={Math.round(
-              Math.log(360 / this.state.longitudeDelta) / Math.LN2,
-            )}></ObjectsOnMap>
-        </MapView>
-        <View style={styles.locationInformation}>
-          <Text>{this.state.selectedMarker}</Text>
-        </View>
+          layout={{flex: 4}}
+          region={{
+            latitude: this.state.region.latitude,
+            latitudeDelta: 0.0922,
+            longitude: this.state.region.longitude,
+
+            longitudeDelta: 0.0421,
+          }}
+          markers={this.state.markers}
+          onMarkerSelect={this.selectMarker}></CustomMap>
       </View>
     ) : (
       <Text>No Coords</Text>
