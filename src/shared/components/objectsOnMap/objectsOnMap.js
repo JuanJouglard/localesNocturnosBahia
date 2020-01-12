@@ -24,8 +24,8 @@ export default class ObjectsOnMap extends Component {
     });
   }
 
-  clickMarker = e => {
-    this.props.onMarkerSelect(e.nativeEvent);
+  clickMarker = markerItem => () => {
+    this.props.onMarkerSelect(markerItem);
   };
 
   render() {
@@ -35,7 +35,7 @@ export default class ObjectsOnMap extends Component {
         return (
           <Marker
             identifier={place.data().id.toString()}
-            onPress={this.clickMarker}
+            onPress={this.clickMarker(place.data())}
             key={place.data().name}
             coordinate={{
               latitude: place.data().location.latitude,
@@ -46,8 +46,8 @@ export default class ObjectsOnMap extends Component {
             <Image
               source={images[place.data().type + 'IMAGE']}
               style={{
-                height: this.props.zoomLevel * 2,
-                width: this.props.zoomLevel * 2,
+                height: 32,
+                width: 32,
               }}></Image>
           </Marker>
         );
