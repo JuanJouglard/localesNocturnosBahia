@@ -1,13 +1,15 @@
 //@ts-check
 import React, {Component} from 'react';
-import {Image, Text, View, StyleSheet} from 'react-native';
+import {Image, Linking, Text, View, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import DetailHeader from '../../shared/components/headerLocalDetail/headerDetail';
+import DetailHeader from './headerLocalDetail/headerDetail';
 import * as images from '../../core/images/images';
 import {faWifi} from '@fortawesome/free-solid-svg-icons';
 import CustomMap from '../../shared/components/map/customMap';
 import CreditCards from './cards';
+import {faInstagram} from '@fortawesome/free-brands-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class LocalDetail extends Component {
   static navigationOptions = props => {
@@ -48,6 +50,9 @@ export default class LocalDetail extends Component {
               }></CreditCards>
           </View>
         </View>
+        <TouchableOpacity onPress={this.goToInstagram}>
+          <FontAwesomeIcon icon={faInstagram} size={32}></FontAwesomeIcon>
+        </TouchableOpacity>
         <CustomMap
           onMarkerSelect={this.noop}
           layout={{
@@ -70,6 +75,10 @@ export default class LocalDetail extends Component {
       return <FontAwesomeIcon size={32} icon={faWifi}></FontAwesomeIcon>;
     else return null;
   }
+
+  goToInstagram = () => {
+    Linking.openURL(this.state.item.instagramAccount);
+  };
 }
 
 const style = StyleSheet.create({

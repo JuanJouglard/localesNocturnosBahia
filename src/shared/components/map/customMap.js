@@ -33,6 +33,7 @@ export default class CustomMap extends Component {
 
   getMarkers() {
     return this.props.markers.map(marker => {
+      console.log('Marker', marker);
       return (
         <Marker
           identifier={marker.id.toString()}
