@@ -33,7 +33,6 @@ export default class CustomMap extends Component {
 
   getMarkers() {
     return this.props.markers.map(marker => {
-      console.log('Marker', marker);
       return (
         <Marker
           identifier={marker.id.toString()}
@@ -43,7 +42,7 @@ export default class CustomMap extends Component {
             latitude: marker.location.latitude,
             longitude: marker.location.longitude,
           }}
-          description={marker.type}
+          description={marker.friendlyType}
           title={marker.name}>
           <Image
             source={images[marker.type + 'IMAGE']}
