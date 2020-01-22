@@ -23,7 +23,7 @@ export class PlacesService {
 
   handleCollection = documents => {
     const documentsData = documents.map(this.extractData);
-    return new Promise((resolve, _) => {
+    return new Promise(resolve => {
       documentsData.forEach(this.renderPlaceListItem);
       resolve(documentsData);
     });

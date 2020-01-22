@@ -40,7 +40,6 @@ export default class Map extends Component {
   };
 
   render() {
-    console.log('State', this.state);
     Geolocation.watchPosition(position => {
       this.setState({region: position.coords});
     });
