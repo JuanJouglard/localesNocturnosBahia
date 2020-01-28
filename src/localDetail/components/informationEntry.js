@@ -4,7 +4,6 @@ import {Text, View} from 'react-native';
 import {PropTypes} from 'prop-types';
 
 export default function InformationDetail(props) {
-  console.log('props', props);
   return (
     <View
       style={{
