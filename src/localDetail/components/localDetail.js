@@ -6,6 +6,7 @@ import DetailHeader from './headerLocalDetail/headerDetail';
 import * as images from '../../core/images/images';
 import Assistance from './assistance';
 import StaticInfo from './staticPlaceInfo';
+import Occupancy from './Occupancy';
 
 export default class LocalDetail extends Component {
   static navigationOptions = props => {
@@ -26,16 +27,23 @@ export default class LocalDetail extends Component {
   }
 
   render() {
-    console.log(this.state.item);
     return (
       <View style={style.container}>
         <ImageBackground
           imageStyle={style.typeImage}
           source={images[this.state.item.type + 'IMAGE']}
           style={style.background}>
-          <StaticInfo item={this.state.item}></StaticInfo>
+          <View style={[style.info]}>
+            <StaticInfo item={this.state.item}></StaticInfo>
+          </View>
           <View style={style.separator}></View>
-          <Assistance></Assistance>
+          <View style={style.occupancy}>
+            <Occupancy progress={0.5}></Occupancy>
+          </View>
+          <View style={style.separator}></View>
+          <View style={style.assistance}>
+            <Assistance></Assistance>
+          </View>
         </ImageBackground>
       </View>
     );
@@ -43,19 +51,32 @@ export default class LocalDetail extends Component {
 }
 
 const style = StyleSheet.create({
+  assistance: {
+    flex: 2,
+  },
   background: {
     height: '100%',
     paddingTop: 20,
   },
+  border: {
+    borderColor: 'black',
+    borderWidth: 5,
+  },
   container: {
     height: '100%',
+  },
+  info: {
+    flex: 1,
+  },
+  occupancy: {
+    flex: 1,
   },
   separator: {
     borderColor: 'black',
     borderWidth: 0.55,
     margin: 15,
-    marginBottom: 24,
-    marginTop: 24,
+    marginBottom: 0,
+    marginTop: 0,
   },
   typeImage: {
     opacity: 0.1,

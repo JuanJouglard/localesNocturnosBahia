@@ -83,7 +83,6 @@ const style = StyleSheet.create({
     fontSize: 20,
   },
   mainInformation: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
