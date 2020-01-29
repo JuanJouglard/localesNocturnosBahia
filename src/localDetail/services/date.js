@@ -31,13 +31,17 @@ export default class DateService {
     if (day === 'tomorrow') {
       dateToReturned.setDate(dateToReturned.getDate() + 1);
     }
-    return new Date(dateToReturned).toISOString();
+
+    console.log('dateToReturn', dateToReturned);
+    return new Date(dateToReturned);
   }
 
   validateTime(whichDate, oldDate, newTime) {
+    console.log('datewichs', whichDate);
     const now = new Date();
     if (whichDate === 'startTime') {
-      if (this.compare(new Date(), newTime)) {
+      if (this.compare(now, newTime)) {
+        console.log('isPreviousTime');
         return {
           startTime: this.createDate('tomorrow', now, newTime),
         };
