@@ -13,7 +13,7 @@ export default class StaticInfo extends Component {
 
   render() {
     return (
-      <View style={style.mainInformation}>
+      <View style={[style.mainInformation]}>
         <TouchableOpacity onPress={this.navigateToPlace}>
           <InformationDetail
             icon={faMapMarkedAlt}
@@ -84,7 +84,8 @@ const style = StyleSheet.create({
   },
   mainInformation: {
     alignItems: 'center',
-    justifyContent: 'space-between',
+    flex: 1,
+    justifyContent: 'space-evenly',
     width: '100%',
   },
 });
