@@ -42,7 +42,7 @@ export default class LocalDetail extends Component {
           </View>
           <View style={style.separator}></View>
           <View style={style.assistance}>
-            <Assistance></Assistance>
+            <Assistance item={this.state.item}></Assistance>
           </View>
         </ImageBackground>
       </View>
