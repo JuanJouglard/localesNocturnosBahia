@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
+import functions from '@react-native-firebase/functions';
 import {firebase} from '@react-native-firebase/auth';
-
 export default class AttendanceService {
   static instance;
 
@@ -20,5 +20,18 @@ export default class AttendanceService {
         startTime: startTime,
         userId: firebase.auth().currentUser.uid,
       });
+  }
+
+  async removeAssitance(id) {
+    return firestore()
+      .collection('Attendance')
+      .doc(id)
+      .delete();
+  }
+
+  getActiveAttendance(userId) {
+    return functions.httpsCallable('getActiveAttendance')({
+      userId: userId,
+    });
   }
 }
