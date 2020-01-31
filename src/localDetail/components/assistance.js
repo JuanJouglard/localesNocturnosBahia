@@ -1,20 +1,29 @@
 /* TODO: REFACTOR */
 import React, {Component} from 'react';
-import {View, Text, TimePickerAndroid, StyleSheet, Alert} from 'react-native';
+import {View, Text, TimePickerAndroid, StyleSheet} from 'react-native';
 import DateService from '../services/date';
 import TimeStamp from './Time';
 import {Clock} from '../../shared/components/clock/Clock';
 import AttendanceService from '../services/attendance';
 import {PropTypes} from 'prop-types';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableHighlight} from 'react-native-gesture-handler';
+import AlertsService from '../../shared/services/alerts';
+import MessagesService from '../../shared/services/messages';
+import ToasterService from '../../shared/services/toaster';
 export default class Assistance extends Component {
   dateService;
   attendanceService;
+  alertService;
+  messageService;
+  toasterService;
 
   constructor(props) {
     super(props);
     this.dateService = DateService.getInstance();
     this.attendanceService = AttendanceService.getInstance();
+    this.alertService = AlertsService.getInstance();
+    this.messageService = MessagesService.getInstance();
+    this.toasterService = ToasterService.getInstance();
     this.state = {
       endTime: null,
       startTime: null,
@@ -32,8 +41,8 @@ export default class Assistance extends Component {
             </Clock>
             <TimeStamp
               titleText="Desde"
-              date={this.getFriendlyDate(this.state.startTime)}
-              time={this.getFriendlyTime(this.state.startTime)}></TimeStamp>
+              date={this.state.startTime?.toLocaleDateString()}
+              time={this.state.startTime?.toLocaleTimeString()}></TimeStamp>
           </View>
           <View style={style.timeStamps}>
             <Clock
@@ -43,62 +52,52 @@ export default class Assistance extends Component {
             </Clock>
             <TimeStamp
               titleText="Hasta"
-              date={this.getFriendlyDate(this.state.endTime)}
-              time={this.getFriendlyTime(this.state.endTime)}></TimeStamp>
+              date={this.state.endTime?.toLocaleDateString()}
+              time={this.state.endTime?.toLocaleTimeString()}></TimeStamp>
           </View>
         </View>
-        <TouchableOpacity
-          style={style.registerButton}
+        <TouchableHighlight
+          style={
+            this.shouldDisableButton
+              ? [style.registerButton, style.disabled]
+              : style.registerButton
+          }
           onPress={this.registerAssistance}
-          disabled={this.shouldDisableButton()}>
+          disabled={this.shouldDisableButton}>
           <Text style={style.registerButtonText}>Registrar</Text>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     );
   }
 
-  shouldDisableButton() {
+  get shouldDisableButton() {
     return !this.state.startTime || !this.state.endTime;
   }
 
   registerAssistance = async () => {
-    Alert.alert('Registrar asistencia', this.getAlertMessage(), [
-      {text: 'Cancelar'},
-      {
-        onPress: async () =>
-          await this.attendanceService.registerAttendance(
+    this.alertService.showConfirmationDialog(
+      'Registrar asistencia',
+      this.getAlertMessage(),
+      async () =>
+        this.attendanceService
+          .registerAttendance(
             this.props.item.id,
             this.state.startTime,
             this.state.endTime,
+          )
+          .then(() =>
+            this.toasterService.showToaster('Asistencia registrada con exito'),
           ),
-        text: 'Confirmar',
-      },
-    ]);
+    );
   };
 
   getAlertMessage = () => {
-    return `Esta seguro/a que quiere confirmar la asistencia a ${
-      this.props.item.name
-    } desde las ${this.getFriendlyTime(
+    return this.messageService.getRegistrationMessage(
+      this.props.item.name,
       this.state.startTime,
-    )}  del ${this.getFriendlyDate(
-      this.state.startTime,
-    )}  hasta las  ${this.getFriendlyTime(
       this.state.endTime,
-    )} del ${this.getFriendlyDate(this.state.endTime)}?`;
+    );
   };
-
-  getFriendlyDate(date) {
-    if (date) {
-      return date.toLocaleDateString();
-    } else return null;
-  }
-
-  getFriendlyTime(date) {
-    if (date) {
-      return date.toLocaleTimeString();
-    } else return null;
-  }
 
   openTimePicker = openClock => time => {
     if (time.action !== TimePickerAndroid.dismissedAction)
@@ -120,6 +119,9 @@ const style = StyleSheet.create({
   assistance: {
     flex: 1,
     justifyContent: 'space-evenly',
+  },
+  disabled: {
+    opacity: 0.5,
   },
   registerButton: {
     alignSelf: 'center',

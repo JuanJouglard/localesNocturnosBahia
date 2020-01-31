@@ -1,8 +1,8 @@
 import React from 'react';
-import {Text, StyleSheet, TimePickerAndroid} from 'react-native';
+import {Text, View, StyleSheet, TimePickerAndroid} from 'react-native';
 import {faClock} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableHighlight} from 'react-native-gesture-handler';
 import {PropTypes} from 'prop-types';
 
 export function Clock(props) {
@@ -25,24 +25,24 @@ export function Clock(props) {
 
   const openPicker = () => {
     TimePickerAndroid.open({
-      hour: new Date().getHours(),
-      is24Hour: true,
-      minute: new Date().getMinutes(),
+      hour: 21,
+      is24Hour: false,
+      minute: 0,
     }).then(props.onPress);
   };
 
   return (
-    <TouchableOpacity
+    <TouchableHighlight
+      underlayColor={'rgba(255,0,0,0)'}
+      activeOpacity={0}
       onPress={openPicker}
-      style={
-        !props.disabled
-          ? [style.clock, style.enabledButton]
-          : [style.clock, style.disabledButton]
-      }
+      style={!props.disabled ? [style.enabledButton] : [style.disabledButton]}
       disabled={props.disabled}>
-      <Text style={style.text}>{props.children}</Text>
-      <FontAwesomeIcon icon={faClock} size={32}></FontAwesomeIcon>
-    </TouchableOpacity>
+      <View style={style.clock}>
+        <Text style={style.text}>{props.children}</Text>
+        <FontAwesomeIcon icon={faClock} size={32}></FontAwesomeIcon>
+      </View>
+    </TouchableHighlight>
   );
 }
 
