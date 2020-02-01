@@ -6,7 +6,7 @@ export default function TimeStamp(props) {
   return (
     <View style={style.container}>
       <Text style={style.text}>{props.date}</Text>
-      <Text style={style.text}>{props.time}</Text>
+      <Text style={style.text}>{props.time?.slice(0, -3)}</Text>
     </View>
   );
 }
