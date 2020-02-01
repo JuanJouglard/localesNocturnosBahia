@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {PropTypes} from 'prop-types';
+import {PlaceItem} from '../listItems/listItem';
 
 export default class ListOfEntries extends Component {
   render() {
@@ -17,7 +18,7 @@ export default class ListOfEntries extends Component {
   listEntry = ({item}) => {
     return (
       <TouchableOpacity onPress={() => this.props.onEntryPress(item)}>
-        {item.renderItem()}
+        <PlaceItem item={item}></PlaceItem>
       </TouchableOpacity>
     );
   };
