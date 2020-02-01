@@ -5,26 +5,26 @@ import Time from './time';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import AlertsService from '../../../shared/services/alerts';
-import AttendanceService from '../../../localDetail/services/attendance';
-
+import firestore from '@react-native-firebase/firestore';
 export default class ActiveAssistanceEntry extends Component {
-  alertService;
-  attendanceService;
-
   constructor(props) {
     super(props);
-    this.alertService = AlertsService.getInstance();
-    this.attendanceService = AttendanceService.getInstance();
   }
 
   render() {
     return (
       <View style={style.layout}>
-        <Text style={style.placeName}>{this.props.item.name}</Text>
-        <Time time={this.props.item.startTime.toDate()}></Time>
-        <Time time={this.props.item.endTime.toDate()}></Time>
-        <TouchableOpacity onPress={this.removeAssitance}>
+        <Text style={style.placeName}>{this.props.item.place.name}</Text>
+        <Time
+          time={this.convertTimeStampToDate(
+            this.props.item.activeEntry.startTime,
+          )}></Time>
+        <Time
+          time={this.convertTimeStampToDate(
+            this.props.item.activeEntry.endTime,
+          )}></Time>
+        <TouchableOpacity
+          onPress={this.props.onPress(this.props.item.activeId)}>
           <FontAwesomeIcon
             icon={faTrashAlt}
             size={32}
@@ -34,35 +34,33 @@ export default class ActiveAssistanceEntry extends Component {
     );
   }
 
-  removeAssitance = () => {
-    this.alertService.showConfirmationDialog(
-      'Borrar',
-      'Esta seguro que quiere borrar este registro?',
-      this.deleteEntry,
-    );
-  };
-
-  deleteEntry = () => {
-    this.attendanceService.removeAssitance(this.props.item.activeId);
-  };
+  convertTimeStampToDate(timestamp) {
+    return new firestore.Timestamp(
+      timestamp._seconds,
+      timestamp._nanoseconds,
+    ).toDate();
+  }
 }
 
 const style = StyleSheet.create({
   layout: {
     alignItems: 'center',
+    backgroundColor: '#d3d3d3',
+    borderRadius: 5,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  placeIcon: {
-    height: 32,
-    width: 32,
+    margin: 15,
+    marginBottom: 0,
   },
   placeName: {
+    flex: 2,
     fontFamily: 'Lobster-Regular',
     fontSize: 20,
+    marginLeft: 10,
+    textAlign: 'center',
   },
 });
 
 ActiveAssistanceEntry.propTypes = {
   item: PropTypes.object,
+  onPress: PropTypes.func,
 };
