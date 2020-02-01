@@ -18,11 +18,11 @@ export const getAttendance = functions.https.onRequest(
   },
 );
 
-export const getActiveAttendance = functions.https.onRequest(
-  async (request, response) => {
+export const getActiveAttendance = functions.https.onCall(
+  async (data, context) => {
     const actives = await db
       .collection('Attendance')
-      .where('uid', '==', request.params.userId)
+      .where('userId', '==', data.userId)
       .get();
     const placesPromises = actives.docs.map(active =>
       db
@@ -35,8 +35,13 @@ export const getActiveAttendance = functions.https.onRequest(
       const correctPlace = respectivePlaces.find(
         place => place.docs[0].data().id === active.data().placeID,
       );
-      return {...active.data(), activeId: active.id, ...correctPlace};
+      const completeObject = {
+        activeEntry: active.data(),
+        activeId: active.id,
+        place: correctPlace?.docs[0].data(),
+      };
+      return completeObject;
     });
-    response.send(responseToSend);
+    return {attendanceData: responseToSend};
   },
 );
