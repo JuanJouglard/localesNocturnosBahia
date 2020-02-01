@@ -30,7 +30,9 @@ export default class Profile extends Component {
           </View>
           <View style={style.actives}>
             <Text style={style.textTitle}>Registros Activos</Text>
-            <ActiveAssistance></ActiveAssistance>
+            <ActiveAssistance
+              // eslint-disable-next-line react/prop-types
+              navigation={this.props.navigation}></ActiveAssistance>
           </View>
         </View>
       );
