@@ -13,8 +13,8 @@ export default class ActiveAssistance extends Component {
   alertService;
   toasterService;
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.attendanceService = AttendanceService.getInstance();
     this.userService = UserService.getInstance();
     this.alertService = AlertsService.getInstance();

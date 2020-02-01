@@ -23,10 +23,14 @@ export default class Profile extends Component {
             <Image
               style={style.profilePicture}
               source={{uri: this.state.currentUser.photoURL}}></Image>
-            <Text style={style.profileName}>
-              {this.state.currentUser.displayName}
-            </Text>
-            <Text style={style.emailText}>{this.state.currentUser.email}</Text>
+            <View style={style.userInfo}>
+              <Text style={style.profileName}>
+                {this.state.currentUser.displayName}
+              </Text>
+              <Text style={style.emailText}>
+                {this.state.currentUser.email}
+              </Text>
+            </View>
           </View>
           <View style={style.actives}>
             <Text style={style.textTitle}>Registros Activos</Text>
@@ -40,11 +44,11 @@ export default class Profile extends Component {
   }
 }
 
-const profileSize = 150;
+const profileSize = 120;
 
 const style = StyleSheet.create({
   actives: {
-    flex: 3,
+    flex: 5,
   },
   emailText: {
     fontFamily: 'Roboto-Light',
@@ -53,6 +57,7 @@ const style = StyleSheet.create({
   layout: {
     alignItems: 'center',
     flex: 2,
+    flexDirection: 'row',
     justifyContent: 'space-around',
   },
   profileName: {
@@ -69,5 +74,9 @@ const style = StyleSheet.create({
     fontFamily: 'Roboto-Italic',
     fontSize: 24,
     padding: 16,
+  },
+  userInfo: {
+    height: profileSize,
+    justifyContent: 'space-evenly',
   },
 });
