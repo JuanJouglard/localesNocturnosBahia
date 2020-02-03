@@ -4,7 +4,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import PropTypes from 'prop-types';
 import CustomMap from '../../../shared/components/map/customMap';
-import {PlacesService} from '../../../core/services/places';
+import {PlacesService} from '../../../shared/services/places';
 
 export default class Map extends Component {
   mapConfiguration = {

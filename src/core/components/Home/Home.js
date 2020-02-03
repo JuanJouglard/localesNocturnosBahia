@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {PlacesService} from '../../services/places';
+import {PlacesService} from '../../../shared/services/places';
 import PropTypes from 'prop-types';
 import ListOfEntries from '../../../shared/components/listOfEntries/listOfEntries';
 import {TabView, TabBar} from 'react-native-tab-view';
