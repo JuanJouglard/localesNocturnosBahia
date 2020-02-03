@@ -52,7 +52,7 @@ const style = StyleSheet.create({
   },
   emailText: {
     fontFamily: 'Roboto-Light',
-    fontSize: 20,
+    fontSize: 18,
   },
   layout: {
     alignItems: 'center',
@@ -77,6 +77,6 @@ const style = StyleSheet.create({
   },
   userInfo: {
     height: profileSize,
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
   },
 });

@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import firestore from '@react-native-firebase/firestore';
-import React from 'react';
-import {PlaceItem} from '../../shared/components/listItems/listItem';
+import Place from '../models/place';
+import Event from '../models/event';
 export class PlacesService {
   singletonInstance;
 
@@ -18,31 +18,32 @@ export class PlacesService {
       .collection(collection)
       .get()
       .then(response => response.docs)
-      .then(this.handleCollection);
+      .then(this.handleCollection(collection));
   }
 
-  handleCollection = documents => {
+  handleCollection = collection => documents => {
     const documentsData = documents.map(this.extractData);
     return new Promise(resolve => {
-      documentsData.forEach(this.renderPlaceListItem);
-      resolve(documentsData);
+      const processedArray = documentsData.map(this.createObject(collection));
+      resolve(processedArray);
     });
+  };
+
+  createObject = collection => item => {
+    if (collection === 'Places') return new Place(item);
+    else return new Event(item);
   };
 
   extractData(item) {
     return item.data();
   }
 
-  renderEventListItem(event) {
-    event.renderItem = function() {
-      return <PlaceItem item={this}></PlaceItem>;
-    };
-  }
-
-  renderPlaceListItem(place) {
-    place.renderItem = function() {
-      return <PlaceItem item={this}></PlaceItem>;
-    };
+  getPlaceById(id) {
+    return firestore()
+      .collection('Places')
+      .where('id', '==', id)
+      .get()
+      .then(response => response.docs[0]);
   }
 
   static getInstance() {
