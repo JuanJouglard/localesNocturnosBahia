@@ -22,16 +22,19 @@ export default class ActiveAssistance extends Component {
     this.state = {
       actives: [],
     };
+    this.props.navigation.addListener('willFocus', this.getActives);
   }
 
   componentDidMount() {
-    this.props.navigation.addListener('didFocus', () => {
-      const userId = this.userService.getCurrentLoggedUser().uid;
-      this.attendanceService.getActiveAttendance(userId).then(response => {
-        this.setState({actives: response.data.attendanceData});
-      });
-    });
+    this.getActives();
   }
+
+  getActives = () => {
+    const userId = this.userService.getCurrentLoggedUser().uid;
+    this.attendanceService.getActiveAttendance(userId).then(response => {
+      this.setState({actives: response.data.attendanceData});
+    });
+  };
 
   render() {
     return (
