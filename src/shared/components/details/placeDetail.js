@@ -5,10 +5,13 @@ import * as images from '../../../core/images/images';
 import Assistance from '../../../localDetail/components/assistance';
 import StaticInfo from '../../../localDetail/components/staticPlaceInfo';
 import Occupancy from '../../../localDetail/components/Occupancy';
+import DateService from '../../../localDetail/services/date';
 
 export default class LocalDetail extends Component {
+  dateService;
   constructor(props) {
     super(props);
+    this.dateService = DateService.getInstance();
   }
 
   render() {
@@ -23,7 +26,9 @@ export default class LocalDetail extends Component {
           </View>
           <View style={style.separator}></View>
           <View style={style.occupancy}>
-            <Occupancy progress={0.5}></Occupancy>
+            <Occupancy
+              progress={this.props.item.attendance || 0}
+              onTimeSelection={this.refreshAttendance}></Occupancy>
           </View>
           <View style={style.separator}></View>
           <View style={style.assistance}>
@@ -33,6 +38,13 @@ export default class LocalDetail extends Component {
       </View>
     );
   }
+
+  //TODO: REFACTOR
+  refreshAttendance = selectedDate => {
+    this.props.item.refreshAttendance(selectedDate.toISOString()).then(() => {
+      this.forceUpdate();
+    });
+  };
 }
 
 const style = StyleSheet.create({
@@ -71,4 +83,5 @@ const style = StyleSheet.create({
 
 LocalDetail.propTypes = {
   item: PropTypes.object.isRequired,
+  navigation: PropTypes.object,
 };
