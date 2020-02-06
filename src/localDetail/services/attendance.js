@@ -46,4 +46,21 @@ export default class AttendanceService {
       })
       .catch(console.log);
   }
+
+  getEventAttendance(id) {
+    return firestore()
+      .collection('AttendanceEvents')
+      .where('eventId', '==', id)
+      .get()
+      .then(response => response.docs.length);
+  }
+
+  getPlaceAttendance(id, date) {
+    return functions()
+      .httpsCallable('getOccupancyByHour')({
+        date: date,
+        placeID: id,
+      })
+      .then(response => response.data.occupancy);
+  }
 }
