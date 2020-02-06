@@ -22,8 +22,7 @@ export default class LocalDetail extends Component {
   }
 
   render() {
-    console.log(this.state.item);
-    return this.state.item.renderDetail();
+    return this.state.item.renderDetail(this.props.navigation);
   }
 }
 
