@@ -45,3 +45,27 @@ export const getActiveAttendance = functions.https.onCall(
     return {attendanceData: responseToSend};
   },
 );
+
+export const getOccupancyByHour = functions.https.onCall(
+  async (input, context) => {
+    const allAttendences = await db
+      .collection('Attendance')
+      .where('placeID', '==', input.placeID)
+      .get();
+    const selectedDate = new Date(input.date);
+    console.log('selectedDate', selectedDate);
+    const attendencesInRange = allAttendences.docs.filter(date => {
+      console.log('startTime', date.data().startTime.toDate());
+      console.log('endTime', date.data().endTime.toDate());
+      console.log(
+        'comparision',
+        date.data().startTime.toDate() <= selectedDate,
+      );
+      return (
+        date.data().startTime.toDate() <= selectedDate &&
+        date.data().endTime.toDate() >= selectedDate
+      );
+    });
+    return {occupancy: attendencesInRange.length};
+  },
+);
