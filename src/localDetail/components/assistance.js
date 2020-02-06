@@ -102,11 +102,13 @@ export default class Assistance extends Component {
   openTimePicker = openClock => time => {
     if (time.action !== TimePickerAndroid.dismissedAction)
       this.setState(previousState => {
-        return this.dateService.validateTime(
-          openClock,
-          previousState.startTime,
-          time,
-        );
+        return {
+          [openClock]: this.dateService.validateTime(
+            openClock,
+            previousState.startTime,
+            time,
+          ),
+        };
       });
   };
 }
