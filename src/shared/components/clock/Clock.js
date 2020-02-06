@@ -26,8 +26,8 @@ export function Clock(props) {
   const openPicker = () => {
     TimePickerAndroid.open({
       hour: 21,
-      is24Hour: false,
       minute: 0,
+      mode: 'spinner',
     }).then(props.onPress);
   };
 
@@ -39,7 +39,7 @@ export function Clock(props) {
       style={!props.disabled ? [style.enabledButton] : [style.disabledButton]}
       disabled={props.disabled}>
       <View style={style.clock}>
-        <Text style={style.text}>{props.children}</Text>
+        {props.children}
         <FontAwesomeIcon icon={faClock} size={32}></FontAwesomeIcon>
       </View>
     </TouchableHighlight>
