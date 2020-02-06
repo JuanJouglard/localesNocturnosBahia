@@ -1,12 +1,18 @@
 import React, {Component} from 'react';
 import ProgressCircle from 'react-native-progress/Circle';
 import {PropTypes} from 'prop-types';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TimePickerAndroid, View} from 'react-native';
 import {Clock} from '../../shared/components/clock/Clock';
+import DateService from '../services/date';
+import TimeStamp from './Time';
 
 export default class Occupancy extends Component {
+  dateService;
+
   constructor(props) {
     super(props);
+    this.dateService = DateService.getInstance();
+    this.state = {selectedDate: null};
   }
 
   render() {
@@ -14,9 +20,14 @@ export default class Occupancy extends Component {
       <View style={style.occupancy}>
         <Text style={style.text}>Ocupacion</Text>
         <View style={style.container}>
-          <Clock>
-            <Text>Seleccionar Horario</Text>
-          </Clock>
+          <View>
+            <Clock onPress={this.selectTime}>
+              <Text>Seleccionar Horario</Text>
+            </Clock>
+            <TimeStamp
+              date={this.state.selectedDate?.toLocaleDateString()}
+              time={this.state.selectedDate?.toLocaleTimeString()}></TimeStamp>
+          </View>
           <ProgressCircle
             progress={this.props.progress}
             size={80}
@@ -35,6 +46,15 @@ export default class Occupancy extends Component {
   getColorFromProgress(progress) {
     return progress > 0.7 ? '#fb4949' : '#01bc40';
   }
+
+  selectTime = selectedTime => {
+    if (selectedTime.action !== TimePickerAndroid.dismissedAction) {
+      const now = new Date();
+      const selectedDate = this.dateService.getProperDate(now, selectedTime);
+      this.setState({selectedDate: selectedDate});
+      this.props.onTimeSelection(selectedDate);
+    }
+  };
 }
 
 const style = StyleSheet.create({
@@ -54,5 +74,6 @@ const style = StyleSheet.create({
 });
 
 Occupancy.propTypes = {
+  onTimeSelection: PropTypes.func,
   progress: PropTypes.number,
 };

@@ -10,7 +10,7 @@ export default class DateService {
     return this.singletonInstance;
   }
 
-  compare(now, time) {
+  isEarlierThan(now, time) {
     const firstDate = new Date(now);
     return (
       firstDate.getHours() > time.hour ||
@@ -20,7 +20,6 @@ export default class DateService {
   }
 
   createDate(day, now, time) {
-    console.log('date' + now);
     const dateToReturned = new Date(
       now.getFullYear(),
       now.getMonth(),
@@ -28,36 +27,24 @@ export default class DateService {
       time.hour,
       time.minute,
     );
-    if (day === 'tomorrow') {
+    if (day === 'nextDay') {
       dateToReturned.setDate(dateToReturned.getDate() + 1);
     }
-
-    console.log('dateToReturn', dateToReturned);
     return new Date(dateToReturned);
   }
 
+  getProperDate(firstDate, secondDate) {
+    if (this.isEarlierThan(firstDate, secondDate))
+      return this.createDate('nextDay', firstDate, secondDate);
+    else return this.createDate('sameDay', firstDate, secondDate);
+  }
+
   validateTime(whichDate, oldDate, newTime) {
-    console.log('datewichs', whichDate);
     const now = new Date();
     if (whichDate === 'startTime') {
-      if (this.compare(now, newTime)) {
-        console.log('isPreviousTime');
-        return {
-          startTime: this.createDate('tomorrow', now, newTime),
-        };
-      } else {
-        return {startTime: this.createDate('today', now, newTime)};
-      }
+      return this.getProperDate(now, newTime);
     } else {
-      if (this.compare(oldDate, newTime) > 0) {
-        return {
-          endTime: this.createDate('tomorrow', new Date(oldDate), newTime),
-        };
-      } else {
-        return {
-          endTime: this.createDate('today', new Date(oldDate), newTime),
-        };
-      }
+      return this.getProperDate(new Date(oldDate), newTime);
     }
   }
 }
