@@ -34,7 +34,7 @@ export default class StaticInfo extends Component {
         </View>
         <SocialNetworks
           instagram={this.props.item.instagramAccount}
-          facebook={'www.facebook.com'}></SocialNetworks>
+          facebook={'http://facebook.com/'}></SocialNetworks>
       </View>
     );
   }
