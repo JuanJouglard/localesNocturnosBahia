@@ -2,11 +2,19 @@
 import firestore from '@react-native-firebase/firestore';
 import Place from '../models/place';
 import Event from '../models/event';
+import Sorter from './sorter';
 export class PlacesService {
   singletonInstance;
+  sorter;
+
+  constructor() {
+    this.sorter = Sorter.getSorter();
+  }
 
   getPlaces() {
-    return this.makeRequest('Places');
+    return this.makeRequest('Places').then(places =>
+      this.sorter.sortByLocation(places),
+    );
   }
 
   getEvents() {
