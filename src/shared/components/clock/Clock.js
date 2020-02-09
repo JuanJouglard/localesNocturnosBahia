@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, TimePickerAndroid} from 'react-native';
+import {View, StyleSheet, TimePickerAndroid} from 'react-native';
 import {faClock} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {TouchableHighlight} from 'react-native-gesture-handler';
