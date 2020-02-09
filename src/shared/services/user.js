@@ -1,4 +1,5 @@
 import {firebase} from '@react-native-firebase/auth';
+import Geolocation from 'react-native-geolocation-service';
 
 export default class UserService {
   instance;
@@ -12,5 +13,9 @@ export default class UserService {
 
   getCurrentLoggedUser() {
     return firebase.auth().currentUser;
+  }
+
+  getUserLocation(callback) {
+    return Geolocation.getCurrentPosition(callback);
   }
 }
