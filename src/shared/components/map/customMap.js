@@ -1,31 +1,35 @@
 import React, {Component} from 'react';
-import {Image, Text} from 'react-native';
-import * as images from '../../../core/images/images';
-import MapView, {Marker} from 'react-native-maps';
+import MapView from 'react-native-maps';
 import PropTypes from 'prop-types';
 import {customStyle} from '../../../core/configurations/map/customStyle';
 import {MarkersFactory} from '../../services/markersFactory';
 export default class CustomMap extends Component {
   mapConfiguration = {
     mapType: 'standard',
-    showsTraffic: true,
+    showsTraffic: false,
     showsUserLocation: true,
   };
 
   markersFactory;
+  mapRef;
 
   constructor(props) {
     super(props);
     this.markersFactory = MarkersFactory.getInstance();
+    this.state = {
+      places: props.markers,
+      searchText: '',
+    };
   }
 
   render() {
     return (
       <MapView
         {...this.mapConfiguration}
+        ref={ref => this.props.mapRef(ref)}
         customMapStyle={customStyle}
-        style={this.props.layout}
-        region={this.props.region}>
+        style={{flex: 1}}
+        initialRegion={this.props.region}>
         {this.getMarkers()}
       </MapView>
     );
@@ -45,7 +49,7 @@ export default class CustomMap extends Component {
 }
 
 CustomMap.propTypes = {
-  layout: PropTypes.object,
+  mapRef: PropTypes.func,
   markers: PropTypes.array,
   onMarkerSelect: PropTypes.func,
   region: PropTypes.object,
