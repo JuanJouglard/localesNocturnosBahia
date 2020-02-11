@@ -1,6 +1,6 @@
 import {MarkerForMap} from '../models/marker';
 
-export class MarkersFactory {
+export default class MarkersFactory {
   instance;
 
   static getInstance() {
