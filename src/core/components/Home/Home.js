@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {ListOfEntries, PlacesService, SearchInput} from '../../../shared';
+import {FilterService, PlacesService} from '../../../shared';
 import {TabView, TabBar} from 'react-native-tab-view';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
+import {routes, componentToRoute} from './routes';
+
 export default class Home extends Component {
   placesService;
+  fitlerService;
 
   constructor(props) {
     super(props);
@@ -14,93 +17,51 @@ export default class Home extends Component {
       initialevents: [],
       initialplaces: [],
       places: [],
-      routes: [
-        {
-          key: 'places',
-          title: 'Locales',
-        },
-        {
-          key: 'events',
-          title: 'Eventos',
-        },
-      ],
     };
+    this.fitlerService = FilterService.getInstance();
+    this.placesService = PlacesService.getInstance();
   }
 
   filterArray = array => text => {
     this.setState(previousState => {
       return {
-        [array]: previousState['initial' + array].filter(item =>
-          item.name.toUpperCase().startsWith(text.toUpperCase()),
+        [array]: this.fitlerService.filter(
+          previousState['initial' + array],
+          'name',
+          text,
         ),
       };
     });
   };
 
-  placesRoute = () => {
-    return (
-      <View>
-        <SearchInput
-          section={'Locales'}
-          onInput={this.filterArray('places')}></SearchInput>
-        <ListOfEntries
-          style={style.list}
-          onEntryPress={item =>
-            this.props.navigation.navigate('Local', {
-              item: item,
-            })
-          }
-          list={this.state.places}></ListOfEntries>
-      </View>
-    );
-  };
-
-  eventsRoute = () => {
-    return (
-      <View>
-        <SearchInput
-          section={'Eventos'}
-          onInput={this.filterArray('events')}></SearchInput>
-        <ListOfEntries
-          onEntryPress={item =>
-            this.props.navigation.navigate('Local', {
-              item: item,
-            })
-          }
-          list={this.state.events}></ListOfEntries>
-      </View>
-    );
-  };
+  //FIX THIS
+  componentRoute = componentToRoute;
 
   renderScene = ({route}) => {
-    switch (route.key) {
-      case 'places':
-        return this.placesRoute();
-      case 'events':
-        return this.eventsRoute();
-      default:
-        return null;
-    }
+    return this.componentRoute(route);
   };
 
   renderTabBar = props => <TabBar {...props} style={style.tabs}></TabBar>;
 
   componentDidMount() {
-    this.placesService = PlacesService.getInstance();
-    this.placesService.getPlaces().then(places => {
-      this.setState({places: places});
-      this.setState({initialplaces: places});
-    });
-    this.placesService.getEvents().then(events => {
-      this.setState({events: events});
-      this.setState({initialevents: events});
+    this.getItemsFromService('Events');
+    this.getItemsFromService('Places');
+  }
+
+  getItemsFromService(type) {
+    const formattedType = type.toLowerCase();
+    this.placesService['get' + type]().then(items => {
+      this.setState({
+        [formattedType]: items,
+        ['initial' + formattedType]: items,
+      });
     });
   }
 
   render() {
     return (
       <TabView
-        navigationState={{index: this.state.index, routes: this.state.routes}}
+        navigationState={{index: this.state.index, routes: routes}}
         renderScene={this.renderScene}
         renderTabBar={this.renderTabBar}
         onIndexChange={index => this.setState({index: index})}
