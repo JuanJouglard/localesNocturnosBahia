@@ -3,10 +3,12 @@ import React, {Component} from 'react';
 import {Keyboard, StyleSheet, Text, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import PropTypes from 'prop-types';
-import CustomMap from '../../../shared/components/map/customMap';
-import {PlacesService} from '../../../shared/services/places';
-import SearchInput from '../../../shared/components/searchInput/searchInput';
-import ListOfEntries from '../../../shared/components/listOfEntries/listOfEntries';
+import {
+  CustomMap,
+  ListOfEntries,
+  PlacesService,
+  SearchInput,
+} from '../../../shared/';
 
 export default class Map extends Component {
   mapConfiguration = {

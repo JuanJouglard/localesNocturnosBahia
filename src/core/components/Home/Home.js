@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import {PlacesService} from '../../../shared/services/places';
 import PropTypes from 'prop-types';
-import ListOfEntries from '../../../shared/components/listOfEntries/listOfEntries';
+import {ListOfEntries, PlacesService, SearchInput} from '../../../shared';
 import {TabView, TabBar} from 'react-native-tab-view';
 import {Dimensions, StyleSheet, View} from 'react-native';
-import SearchInput from '../../../shared/components/searchInput/searchInput';
 export default class Home extends Component {
   placesService;
 
