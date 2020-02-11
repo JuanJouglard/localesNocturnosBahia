@@ -1,6 +1,6 @@
 //@ts-check
 import React, {Component} from 'react';
-import {Keyboard, StyleSheet, Text, View} from 'react-native';
+import {Keyboard, StyleSheet, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import PropTypes from 'prop-types';
 import {
@@ -8,6 +8,7 @@ import {
   ListOfEntries,
   PlacesService,
   SearchInput,
+  FilterService,
 } from '../../../shared/';
 
 export default class Map extends Component {
@@ -17,6 +18,7 @@ export default class Map extends Component {
     showsUserLocation: true,
   };
   placesService;
+  filterService;
   mapRef;
 
   constructor(props) {
@@ -34,13 +36,13 @@ export default class Map extends Component {
       },
       searchText: '',
     };
+    this.placesService = PlacesService.getInstance();
+    this.filterService = FilterService.getInstance();
   }
 
   componentDidMount() {
-    this.placesService = PlacesService.getInstance();
     this.placesService.getPlaces().then(documents => {
-      this.setState({markers: documents});
-      this.setState({initialMarkers: documents});
+      this.setState({initialMarkers: documents, markers: documents});
     });
   }
 
@@ -51,11 +53,15 @@ export default class Map extends Component {
   };
 
   filterPlaces = text => {
-    this.setState({
-      places: this.state.initialMarkers.filter(item =>
-        item.name.toUpperCase().startsWith(text.toUpperCase()),
-      ),
-      searchText: text,
+    this.setState(prevState => {
+      return {
+        places: this.filterService.filter(
+          prevState.initialMarkers,
+          'name',
+          text,
+        ),
+        searchText: text,
+      };
     });
   };
 
@@ -68,32 +74,38 @@ export default class Map extends Component {
         longitude: selectedItem.location._longitude,
         longitudeDelta: 0.005,
       },
-      4000,
+      3000,
     );
     this.setState({
       searchText: '',
     });
   };
 
-  render() {
+  typeAheadList = () => {
+    if (this.state.searchText.length > 1)
+      return (
+        <View>
+          <ListOfEntries
+            onEntryPress={this.navigateToMarker}
+            list={this.state.places}></ListOfEntries>
+        </View>
+      );
+  };
+
+  watchUserPosition() {
     Geolocation.watchPosition(position => {
       this.setState({region: position.coords});
     });
+  }
+
+  render() {
+    this.watchUserPosition();
     return this.state.region.longitude !== null ? (
       <View style={styles.mapContainer}>
         <SearchInput
           section="Locales"
           onInput={this.filterPlaces}></SearchInput>
-        {(() => {
-          if (this.state.searchText.length > 1)
-            return (
-              <View>
-                <ListOfEntries
-                  onEntryPress={this.navigateToMarker}
-                  list={this.state.places}></ListOfEntries>
-              </View>
-            );
-        })()}
+        {this.typeAheadList()}
         <View style={styles.mapView}>
           <CustomMap
             mapRef={map => (this.mapRef = map)}
@@ -105,9 +117,7 @@ export default class Map extends Component {
             onMarkerSelect={this.selectMarker}></CustomMap>
         </View>
       </View>
-    ) : (
-      <Text>No Coords</Text>
-    );
+    ) : null;
   }
 }
 
@@ -116,9 +126,6 @@ Map.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  locationInformation: {
-    flex: 2,
-  },
   mapContainer: {
     flex: 1,
   },
