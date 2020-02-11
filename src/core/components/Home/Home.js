@@ -3,7 +3,8 @@ import {PlacesService} from '../../../shared/services/places';
 import PropTypes from 'prop-types';
 import ListOfEntries from '../../../shared/components/listOfEntries/listOfEntries';
 import {TabView, TabBar} from 'react-native-tab-view';
-import {Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
+import SearchInput from '../../../shared/components/searchInput/searchInput';
 export default class Home extends Component {
   placesService;
 
@@ -12,6 +13,8 @@ export default class Home extends Component {
     this.state = {
       events: [],
       index: 0,
+      initialevents: [],
+      initialplaces: [],
       places: [],
       routes: [
         {
@@ -26,28 +29,48 @@ export default class Home extends Component {
     };
   }
 
+  filterArray = array => text => {
+    this.setState(previousState => {
+      return {
+        [array]: previousState['initial' + array].filter(item =>
+          item.name.toUpperCase().startsWith(text.toUpperCase()),
+        ),
+      };
+    });
+  };
+
   placesRoute = () => {
     return (
-      <ListOfEntries
-        style={style.list}
-        onEntryPress={item =>
-          this.props.navigation.navigate('Local', {
-            item: item,
-          })
-        }
-        list={this.state.places}></ListOfEntries>
+      <View>
+        <SearchInput
+          section={'Locales'}
+          onInput={this.filterArray('places')}></SearchInput>
+        <ListOfEntries
+          style={style.list}
+          onEntryPress={item =>
+            this.props.navigation.navigate('Local', {
+              item: item,
+            })
+          }
+          list={this.state.places}></ListOfEntries>
+      </View>
     );
   };
 
   eventsRoute = () => {
     return (
-      <ListOfEntries
-        onEntryPress={item =>
-          this.props.navigation.navigate('Local', {
-            item: item,
-          })
-        }
-        list={this.state.events}></ListOfEntries>
+      <View>
+        <SearchInput
+          section={'Eventos'}
+          onInput={this.filterArray('events')}></SearchInput>
+        <ListOfEntries
+          onEntryPress={item =>
+            this.props.navigation.navigate('Local', {
+              item: item,
+            })
+          }
+          list={this.state.events}></ListOfEntries>
+      </View>
     );
   };
 
@@ -68,9 +91,11 @@ export default class Home extends Component {
     this.placesService = PlacesService.getInstance();
     this.placesService.getPlaces().then(places => {
       this.setState({places: places});
+      this.setState({initialplaces: places});
     });
     this.placesService.getEvents().then(events => {
       this.setState({events: events});
+      this.setState({initialevents: events});
     });
   }
 
