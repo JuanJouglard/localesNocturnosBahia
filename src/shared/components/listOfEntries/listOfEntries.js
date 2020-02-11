@@ -7,6 +7,7 @@ export default class ListOfEntries extends Component {
   render() {
     return (
       <FlatList
+        keyboardShouldPersistTaps="always"
         style={style.homeList}
         data={this.props.list}
         renderItem={this.listEntry}
