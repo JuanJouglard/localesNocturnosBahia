@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import MapView from 'react-native-maps';
 import PropTypes from 'prop-types';
 import {customStyle} from '../../../core/configurations/map/customStyle';
-import {MarkersFactory} from '../../services/markersFactory';
+import MarkersFactory from '../../services/markersFactory';
 export default class CustomMap extends Component {
   mapConfiguration = {
     mapType: 'standard',
