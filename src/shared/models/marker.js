@@ -16,7 +16,6 @@ export class MarkerForMap {
   }
 
   render() {
-    console.log(this);
     return (
       <Marker
         identifier={this.id.toString()}

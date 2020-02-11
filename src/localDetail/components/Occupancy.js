@@ -18,7 +18,7 @@ export default class Occupancy extends Component {
   render() {
     return (
       <View style={style.occupancy}>
-        <Text style={style.text}>Ocupacion</Text>
+        <Text style={style.text}>Ocupación</Text>
         <View style={style.container}>
           <View>
             <Clock onPress={this.selectTime}>

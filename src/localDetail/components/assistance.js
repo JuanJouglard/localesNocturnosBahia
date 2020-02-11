@@ -33,11 +33,13 @@ export default class Assistance extends Component {
   render() {
     return (
       <View style={style.assistance}>
-        <Text style={style.titleText}>¿Cuando vas a asistir?</Text>
+        <Text style={[style.titleText]}>¿Cuándo vas a asistir?</Text>
         <View style={style.timePicker}>
           <View style={style.timeStamps}>
             <Clock onPress={this.openTimePicker('startTime')}>
-              <Text>Desde</Text>
+              <Text style={[style.robotoRegular, style.marginBottom]}>
+                Desde
+              </Text>
             </Clock>
             <TimeStamp
               titleText="Desde"
@@ -48,7 +50,9 @@ export default class Assistance extends Component {
             <Clock
               onPress={this.openTimePicker('endTime')}
               disabled={this.state.startTime === null}>
-              <Text>Hasta</Text>
+              <Text style={[style.robotoRegular, style.marginBottom]}>
+                Hasta
+              </Text>
             </Clock>
             <TimeStamp
               titleText="Hasta"
@@ -125,6 +129,9 @@ const style = StyleSheet.create({
   disabled: {
     opacity: 0.5,
   },
+  marginBottom: {
+    marginBottom: 5,
+  },
   registerButton: {
     alignSelf: 'center',
     backgroundColor: '#3378e0',
@@ -139,12 +146,16 @@ const style = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
   },
+  robotoRegular: {
+    fontFamily: 'Roboto-Regular',
+  },
   timePicker: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },
   timeStamps: {
     alignItems: 'center',
+    flex: 1,
   },
   titleText: {
     fontFamily: 'Roboto-Light',

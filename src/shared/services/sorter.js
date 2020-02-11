@@ -15,7 +15,7 @@ export default class Sorter {
   }
 
   sortByLocation = places => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.userService.getUserLocation(location => {
         const sortedPlaces = places.sort(this.sortNearBy(location.coords));
         resolve(sortedPlaces);

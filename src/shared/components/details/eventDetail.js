@@ -14,6 +14,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMale, faFemale} from '@fortawesome/free-solid-svg-icons';
 import AlertsService from '../../services/alerts';
 import ToasterService from '../../services/toaster';
+import TimeStamp from '../../../localDetail/components/Time';
 export default class EventDetail extends Component {
   attendanceService;
   alertService;
@@ -47,19 +48,39 @@ export default class EventDetail extends Component {
           <View style={style.separator}></View>
           <View style={style.people}>
             <Text style={style.title}>Asistencia</Text>
-            <View style={style.quantity}>
+            <View style={style.dates}>
+              <View style={[style.alignCenter, style.greyBackground]}>
+                <Text style={[style.robotoLight, style.mediumFont]}>
+                  Inicio del evento
+                </Text>
+                <TimeStamp
+                  time={this.props.item.startDate.toDate().toLocaleTimeString()}
+                  date={this.props.item.startDate
+                    .toDate()
+                    .toLocaleDateString()}></TimeStamp>
+              </View>
+              <View style={[style.alignCenter, style.greyBackground]}>
+                <Text style={[style.robotoLight, style.mediumFont]}>
+                  Fin del evento
+                </Text>
+                <TimeStamp
+                  time={this.props.item.endDate.toDate().toLocaleTimeString()}
+                  date={this.props.item.endDate
+                    .toDate()
+                    .toLocaleDateString()}></TimeStamp>
+              </View>
+            </View>
+            <View style={[style.quantity, style.alignCenter]}>
               <FontAwesomeIcon icon={faMale} size={36}></FontAwesomeIcon>
               <FontAwesomeIcon icon={faFemale} size={36}></FontAwesomeIcon>
               <Text style={style.quantityText}>{this.props.item.people}</Text>
             </View>
-          </View>
-          <View style={style.separator}></View>
-          <View style={style.assistance}>
-            <Text style={style.title}>Asistir</Text>
             <TouchableHighlight
               style={style.registerButton}
               onPress={this.registerAttendanceToEvent}>
-              <Text style={style.registerButtonText}>Registrar</Text>
+              <Text style={[style.registerButtonText, style.robotoRegular]}>
+                Asistir
+              </Text>
             </TouchableHighlight>
           </View>
         </ImageBackground>
@@ -70,7 +91,7 @@ export default class EventDetail extends Component {
   registerAttendanceToEvent = () => {
     this.alertService.showConfirmationDialog(
       'Confirmar',
-      `Esta seguro/a que quiere confirmar la asistencia a ${this.props.item.name}`,
+      this.getMessageForConfirmation(),
       () => {
         this.attendanceService
           .registerAttendanceToEvent(this.props.item.id)
@@ -81,9 +102,18 @@ export default class EventDetail extends Component {
       },
     );
   };
+
+  //TODO: Move this logic to message service
+  getMessageForConfirmation() {
+    return `Esta seguro/a que quiere confirmar la asistencia a 
+    ${this.props.item.name}`;
+  }
 }
 
 const style = StyleSheet.create({
+  alignCenter: {
+    alignItems: 'center',
+  },
   assistance: {
     flex: 2,
   },
@@ -98,17 +128,29 @@ const style = StyleSheet.create({
   container: {
     height: '100%',
   },
+  dates: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  greyBackground: {
+    backgroundColor: '#e5e2e2',
+    borderRadius: 5,
+    padding: 8,
+  },
   info: {
     flex: 1,
   },
+  mediumFont: {
+    fontSize: 14,
+  },
   people: {
     flex: 1,
+    justifyContent: 'space-evenly',
   },
   placeName: {
     textAlign: 'center',
   },
   quantity: {
-    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -127,8 +169,10 @@ const style = StyleSheet.create({
   },
   registerButtonText: {
     color: 'white',
-    fontFamily: 'Roboto-Regular',
     fontSize: 16,
+  },
+  robotoRegular: {
+    fontFamily: 'Roboto-Regular',
   },
   separator: {
     borderColor: 'black',
