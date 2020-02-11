@@ -3,7 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 import Place from '../models/place';
 import Event from '../models/event';
 import Sorter from './sorter';
-export class PlacesService {
+export default class PlacesService {
   singletonInstance;
   sorter;
 

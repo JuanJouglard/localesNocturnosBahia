@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ProgressCircle from 'react-native-progress/Circle';
 import {PropTypes} from 'prop-types';
 import {StyleSheet, Text, TimePickerAndroid, View} from 'react-native';
-import {Clock} from '../../shared/components/clock/Clock';
+import {Clock} from '../../shared/';
 import DateService from '../services/date';
 import TimeStamp from './Time';
 

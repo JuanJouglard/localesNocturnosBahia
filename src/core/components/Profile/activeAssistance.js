@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import UserService from '../../../shared/services/user';
+import {AlertsService, ToasterService, UserService} from '../../../shared/';
 import {FlatList} from 'react-native-gesture-handler';
 import ActiveAssistanceEntry from './activeAssitanceEntry';
 import AttendanceService from '../../../localDetail/services/attendance';
-import AlertsService from '../../../shared/services/alerts';
-import ToasterService from '../../../shared/services/toaster';
 import {PropTypes} from 'prop-types';
 
 export default class ActiveAssistance extends Component {
