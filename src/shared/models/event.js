@@ -1,7 +1,7 @@
 import AppItem from './appItem';
 import EventDetail from '../components/details/eventDetail';
 import React from 'react';
-import {PlacesService} from '../services/places';
+import PlacesService from '../services/places';
 import AttendanceService from '../../localDetail/services/attendance';
 export default class Event extends AppItem {
   placeId;

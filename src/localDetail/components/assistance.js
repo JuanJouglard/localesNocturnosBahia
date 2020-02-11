@@ -3,13 +3,15 @@ import React, {Component} from 'react';
 import {View, Text, TimePickerAndroid, StyleSheet} from 'react-native';
 import DateService from '../services/date';
 import TimeStamp from './Time';
-import {Clock} from '../../shared/components/clock/Clock';
+import {
+  AlertsService,
+  Clock,
+  MessagesService,
+  ToasterService,
+} from '../../shared';
 import AttendanceService from '../services/attendance';
 import {PropTypes} from 'prop-types';
 import {TouchableHighlight} from 'react-native-gesture-handler';
-import AlertsService from '../../shared/services/alerts';
-import MessagesService from '../../shared/services/messages';
-import ToasterService from '../../shared/services/toaster';
 export default class Assistance extends Component {
   dateService;
   attendanceService;
