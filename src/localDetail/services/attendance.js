@@ -12,12 +12,13 @@ export default class AttendanceService {
     return this.instance;
   }
 
-  async registerAttendance(placeId, startTime, endTime) {
+  async registerAttendance(placeId, placeName, startTime, endTime) {
     return firestore()
       .collection('Attendance')
       .add({
         endTime: endTime,
-        placeID: placeId,
+        placeId: placeId,
+        placeName: placeName,
         startTime: startTime,
         userId: firebase.auth().currentUser.uid,
       });
@@ -40,11 +41,19 @@ export default class AttendanceService {
   }
 
   getActiveAttendance(userId) {
-    return functions()
-      .httpsCallable('getActiveAttendance')({
-        userId: userId,
-      })
-      .catch(console.log);
+    return firestore()
+      .collection('Attendance')
+      .where('userId', '==', userId)
+      .get();
+  }
+
+  getActiveAttendanceByUserAndPlace(placeId) {
+    const userId = firebase.auth().currentUser.uid;
+    return firestore()
+      .collection('Attendance')
+      .where('userId', '==', userId)
+      .where('placeId', '==', placeId)
+      .get();
   }
 
   getEventAttendance(id) {
@@ -53,6 +62,15 @@ export default class AttendanceService {
       .where('eventId', '==', id)
       .get()
       .then(response => response.docs.length);
+  }
+
+  getEventAttendanceByUserId(eventId) {
+    const userId = firebase.auth().currentUser.uid;
+    return firestore()
+      .collection('AttendanceEvents')
+      .where('eventId', '==', eventId)
+      .where('userId', '==', userId)
+      .get();
   }
 
   getPlaceAttendance(id, date) {

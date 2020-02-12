@@ -14,15 +14,11 @@ export default class ActiveAssistanceEntry extends Component {
   render() {
     return (
       <View style={style.layout}>
-        <Text style={style.placeName}>{this.props.item.place.name}</Text>
+        <Text style={style.placeName}>{this.props.item.placeName}</Text>
         <Time
-          time={this.convertTimeStampToDate(
-            this.props.item.activeEntry.startTime,
-          )}></Time>
+          time={this.convertTimeStampToDate(this.props.item.startTime)}></Time>
         <Time
-          time={this.convertTimeStampToDate(
-            this.props.item.activeEntry.endTime,
-          )}></Time>
+          time={this.convertTimeStampToDate(this.props.item.endTime)}></Time>
         <TouchableOpacity
           onPress={this.props.onPress(this.props.item.activeId)}>
           <FontAwesomeIcon
