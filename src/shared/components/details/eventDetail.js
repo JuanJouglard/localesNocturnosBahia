@@ -15,6 +15,8 @@ import {faMale, faFemale} from '@fortawesome/free-solid-svg-icons';
 import AlertsService from '../../services/alerts';
 import ToasterService from '../../services/toaster';
 import TimeStamp from '../../../localDetail/components/Time';
+
+//REFACTOR THIS
 export default class EventDetail extends Component {
   attendanceService;
   alertService;
@@ -28,10 +30,14 @@ export default class EventDetail extends Component {
     this.props.navigation.addListener('willFocus', () =>
       this.props.item.refreshAttendance().then(() => this.forceUpdate()),
     );
+    this.state = {
+      hasActiveAttendance: true,
+    };
   }
 
   componentDidMount() {
     this.props.item.refreshAttendance().then(() => this.forceUpdate());
+    this.refreshAttendance();
   }
 
   render() {
@@ -76,7 +82,11 @@ export default class EventDetail extends Component {
               <Text style={style.quantityText}>{this.props.item.people}</Text>
             </View>
             <TouchableHighlight
-              style={style.registerButton}
+              disabled={this.state.hasActiveAttendance}
+              style={[
+                style.registerButton,
+                this.state.hasActiveAttendance ? style.disabled : null,
+              ]}
               onPress={this.registerAttendanceToEvent}>
               <Text style={[style.registerButtonText, style.robotoRegular]}>
                 Asistir
@@ -98,6 +108,7 @@ export default class EventDetail extends Component {
           .then(() => {
             this.toasterService.showToaster('Asistencia registrada con exito');
             this.props.item.refreshAttendance().then(() => this.forceUpdate());
+            this.refreshAttendance();
           });
       },
     );
@@ -107,6 +118,14 @@ export default class EventDetail extends Component {
   getMessageForConfirmation() {
     return `Esta seguro/a que quiere confirmar la asistencia a 
     ${this.props.item.name}`;
+  }
+
+  refreshAttendance() {
+    this.attendanceService
+      .getEventAttendanceByUserId(this.props.item.id)
+      .then(response => {
+        this.setState({hasActiveAttendance: !!response.docs.length});
+      });
   }
 }
 
@@ -131,6 +150,9 @@ const style = StyleSheet.create({
   dates: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+  },
+  disabled: {
+    opacity: 0.5,
   },
   greyBackground: {
     backgroundColor: '#e5e2e2',

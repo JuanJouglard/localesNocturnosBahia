@@ -28,8 +28,13 @@ export default class Assistance extends Component {
     this.toasterService = ToasterService.getInstance();
     this.state = {
       endTime: null,
+      hasActiveAttendance: true,
       startTime: null,
     };
+  }
+
+  componentDidMount() {
+    this.refreshAttendance();
   }
 
   render() {
@@ -38,7 +43,9 @@ export default class Assistance extends Component {
         <Text style={[style.titleText]}>¿Cuándo vas a asistir?</Text>
         <View style={style.timePicker}>
           <View style={style.timeStamps}>
-            <Clock onPress={this.openTimePicker('startTime')}>
+            <Clock
+              onPress={this.openTimePicker('startTime')}
+              disabled={this.state.hasActiveAttendance}>
               <Text style={[style.robotoRegular, style.marginBottom]}>
                 Desde
               </Text>
@@ -51,7 +58,9 @@ export default class Assistance extends Component {
           <View style={style.timeStamps}>
             <Clock
               onPress={this.openTimePicker('endTime')}
-              disabled={this.state.startTime === null}>
+              disabled={
+                this.state.startTime === null || this.state.hasActiveAttendance
+              }>
               <Text style={[style.robotoRegular, style.marginBottom]}>
                 Hasta
               </Text>
@@ -88,12 +97,14 @@ export default class Assistance extends Component {
         this.attendanceService
           .registerAttendance(
             this.props.item.id,
+            this.props.item.name,
             this.state.startTime,
             this.state.endTime,
           )
-          .then(() =>
-            this.toasterService.showToaster('Asistencia registrada con exito'),
-          ),
+          .then(() => {
+            this.toasterService.showToaster('Asistencia registrada con exito');
+            this.refreshAttendance();
+          }),
     );
   };
 
@@ -117,6 +128,21 @@ export default class Assistance extends Component {
         };
       });
   };
+
+  refreshAttendance() {
+    this.attendanceService
+      .getActiveAttendanceByUserAndPlace(this.props.item.id)
+      .then(response => {
+        if (response.docs.length) {
+          const activeAttendance = response.docs[0].data();
+          this.setState({
+            endTime: activeAttendance.endTime.toDate(),
+            hasActiveAttendance: true,
+            startTime: activeAttendance.startTime.toDate(),
+          });
+        } else this.setState({hasActiveAttendance: false});
+      });
+  }
 }
 
 Assistance.propTypes = {
