@@ -19,12 +19,14 @@ export default class CustomMap extends Component {
     this.state = {
       places: props.markers,
       searchText: '',
+      zoomLevel: 0,
     };
   }
 
   render() {
     return (
       <MapView
+        onRegionChange={this.changeZoom}
         {...this.mapConfiguration}
         ref={ref => this.props.mapRef(ref)}
         customMapStyle={customStyle}
@@ -42,10 +44,24 @@ export default class CustomMap extends Component {
   getMarkers() {
     return this.props.markers.map(marker => {
       return this.markersFactory
-        .createMarker({clickMarker: this.clickMarker(marker), ...marker})
+        .createMarker({
+          clickMarker: this.clickMarker(marker),
+          ...marker,
+          zoomLevel: this.state.zoomLevel,
+        })
         .render();
     });
   }
+
+  changeZoom = region => {
+    const zoomLevel = Math.round(
+      Math.log(360 / region.longitudeDelta) / Math.LN2,
+    );
+    if (zoomLevel === 12 || zoomLevel === 14)
+      this.setState({
+        zoomLevel: zoomLevel,
+      });
+  };
 }
 
 CustomMap.propTypes = {

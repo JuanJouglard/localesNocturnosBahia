@@ -10,6 +10,7 @@ export class MarkerForMap {
   friendlyType;
   type;
   clickMarker;
+  zoomLevel;
 
   constructor(props) {
     Object.assign(this, props);
@@ -28,15 +29,7 @@ export class MarkerForMap {
         description={this.friendlyType}
         title={this.name}>
         <View style={{alignItems: 'center'}}>
-          <Text
-            style={{
-              color: 'white',
-              fontFamily: 'Roboto-Regular',
-              fontSize: 10,
-              fontWeight: 'bold',
-            }}>
-            {this.name}
-          </Text>
+          {this.showText()}
           <Image
             source={images[this.type + 'IMAGE']}
             style={{
@@ -46,5 +39,20 @@ export class MarkerForMap {
         </View>
       </Marker>
     );
+  }
+
+  showText() {
+    if (this.zoomLevel > 13)
+      return (
+        <Text
+          style={{
+            color: 'white',
+            fontFamily: 'Roboto-Regular',
+            fontSize: 10,
+            fontWeight: 'bold',
+          }}>
+          {this.name}
+        </Text>
+      );
   }
 }
