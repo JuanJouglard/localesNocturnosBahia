@@ -4,7 +4,7 @@ import {PropTypes} from 'prop-types';
 
 export default function Time(props) {
   return (
-    <View style={{alignItems: 'center', flex: 2}}>
+    <View style={{alignItems: 'center', flex: 2, justifyContent: 'center'}}>
       <Text style={style.text}>{props.time.toLocaleDateString()}</Text>
       <Text style={style.text}>
         {props.time.toLocaleTimeString().slice(0, -3)}

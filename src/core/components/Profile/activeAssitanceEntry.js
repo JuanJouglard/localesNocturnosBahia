@@ -14,11 +14,13 @@ export default class ActiveAssistanceEntry extends Component {
   render() {
     return (
       <View style={style.layout}>
-        <Text style={style.placeName}>{this.props.item.placeName}</Text>
-        <Time
-          time={this.convertTimeStampToDate(this.props.item.startTime)}></Time>
-        <Time
-          time={this.convertTimeStampToDate(this.props.item.endTime)}></Time>
+        <Text style={style.placeName}>{this.props.item.name}</Text>
+        <View style={style.timeStamps}>
+          {this.getTimeStamps(this.props.item.startTime)}
+        </View>
+        <View style={style.timeStamps}>
+          {this.getTimeStamps(this.props.item.endTime)}
+        </View>
         <TouchableOpacity
           onPress={this.props.onPress(this.props.item.activeId)}>
           <FontAwesomeIcon
@@ -28,6 +30,14 @@ export default class ActiveAssistanceEntry extends Component {
         </TouchableOpacity>
       </View>
     );
+  }
+
+  getTimeStamps(time) {
+    if (time)
+      return (
+        <Time
+          time={this.convertTimeStampToDate(this.props.item.startTime)}></Time>
+      );
   }
 
   convertTimeStampToDate(timestamp) {
@@ -44,8 +54,12 @@ const style = StyleSheet.create({
     backgroundColor: '#d3d3d3',
     borderRadius: 5,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     margin: 15,
     marginBottom: 0,
+    paddingBottom: 5,
+    paddingRight: 2,
+    paddingTop: 5,
   },
   placeName: {
     flex: 2,
@@ -53,6 +67,9 @@ const style = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
     textAlign: 'center',
+  },
+  timeStamps: {
+    flex: 2,
   },
 });
 
