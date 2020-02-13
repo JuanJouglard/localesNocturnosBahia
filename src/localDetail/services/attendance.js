@@ -1,9 +1,14 @@
 import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
 import {firebase} from '@react-native-firebase/auth';
-
+import {UserService} from '../../shared';
 export default class AttendanceService {
   static instance;
+  userService;
+
+  constructor() {
+    this.userService = UserService.getInstance();
+  }
 
   static getInstance() {
     if (!this.instance) {
@@ -29,7 +34,7 @@ export default class AttendanceService {
       .collection('AttendanceEvents')
       .add({
         eventId: eventId,
-        userId: firebase.auth().currentUser.uid,
+        userId: this.userService.getCurrentLoggedUser().uid,
       });
   }
 
@@ -48,7 +53,7 @@ export default class AttendanceService {
   }
 
   getActiveAttendanceByUserAndPlace(placeId) {
-    const userId = firebase.auth().currentUser.uid;
+    const userId = this.userService.getCurrentLoggedUser().uid;
     return firestore()
       .collection('Attendance')
       .where('userId', '==', userId)
@@ -65,7 +70,7 @@ export default class AttendanceService {
   }
 
   getEventAttendanceByUserId(eventId) {
-    const userId = firebase.auth().currentUser.uid;
+    const userId = this.userService.getCurrentLoggedUser().uid;
     return firestore()
       .collection('AttendanceEvents')
       .where('eventId', '==', eventId)
