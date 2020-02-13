@@ -34,11 +34,8 @@ export default class Home extends Component {
     });
   };
 
-  //FIX THIS
-  componentRoute = componentToRoute;
-
   renderScene = ({route}) => {
-    return this.componentRoute(route);
+    return componentToRoute.call(this, route);
   };
 
   renderTabBar = props => <TabBar {...props} style={style.tabs}></TabBar>;
