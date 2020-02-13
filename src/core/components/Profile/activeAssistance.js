@@ -29,14 +29,22 @@ export default class ActiveAssistance extends Component {
 
   getActives = () => {
     const userId = this.userService.getCurrentLoggedUser().uid;
-    this.attendanceService.getActiveAttendance(userId).then(response => {
-      this.setState({
-        actives: response.docs.map(attendance => {
-          return {...attendance.data(), activeId: attendance.id};
-        }),
+    this.attendanceService
+      .getActiveAttendance(userId)
+      .then(([places, events]) => {
+        const placesData = this.getDataFromArray(places.docs);
+        const eventsData = this.getDataFromArray(events.docs);
+        this.setState({
+          actives: placesData.concat(eventsData),
+        });
       });
-    });
   };
+
+  getDataFromArray(array) {
+    return array.map(attendance => {
+      return {...attendance.data(), activeId: attendance.id};
+    });
+  }
 
   render() {
     return (

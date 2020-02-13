@@ -22,8 +22,8 @@ export default class AttendanceService {
       .collection('Attendance')
       .add({
         endTime: endTime,
+        name: placeName,
         placeId: placeId,
-        placeName: placeName,
         startTime: startTime,
         userId: firebase.auth().currentUser.uid,
       });
@@ -34,7 +34,7 @@ export default class AttendanceService {
       .collection('AttendanceEvents')
       .add({
         eventId: eventId,
-        eventName: eventName,
+        name: eventName,
         userId: this.userService.getCurrentLoggedUser().uid,
       });
   }
@@ -47,10 +47,15 @@ export default class AttendanceService {
   }
 
   getActiveAttendance(userId) {
-    return firestore()
+    const placesAttendance = firestore()
       .collection('Attendance')
       .where('userId', '==', userId)
       .get();
+    const eventsAttendance = firestore()
+      .collection('AttendanceEvents')
+      .where('userId', '==', userId)
+      .get();
+    return Promise.all([placesAttendance, eventsAttendance]);
   }
 
   getActiveAttendanceByUserAndPlace(placeId) {
