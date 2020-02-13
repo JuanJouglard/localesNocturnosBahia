@@ -1,19 +1,27 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {firebase} from '@react-native-firebase/auth';
 import ActiveAssistance from './activeAssistance';
+import {UserService} from '../../../shared/';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class Profile extends Component {
+  userService;
+
   constructor() {
     super();
     this.state = {
       currentUser: null,
     };
+    this.userService = UserService.getInstance();
   }
 
   componentDidMount() {
-    this.setState({currentUser: firebase.auth().currentUser});
+    this.setState({currentUser: this.userService.getCurrentLoggedUser()});
   }
+
+  logOut = () => {
+    this.userService.logOut().then(this.userService.logIn);
+  };
 
   render() {
     if (this.state.currentUser)
@@ -32,6 +40,9 @@ export default class Profile extends Component {
               </Text>
             </View>
           </View>
+          <TouchableOpacity onPress={this.logOut}>
+            <Text style={style.logOutButton}> Log out</Text>
+          </TouchableOpacity>
           <View style={style.actives}>
             <Text style={style.textTitle}>Registros Activos</Text>
             <ActiveAssistance
@@ -59,6 +70,14 @@ const style = StyleSheet.create({
     flex: 2,
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+  logOutButton: {
+    alignSelf: 'center',
+    backgroundColor: '#fc4646',
+    borderRadius: 3,
+    color: 'white',
+    fontWeight: 'bold',
+    padding: 10,
   },
   profileName: {
     fontFamily: 'Roboto-Light',
