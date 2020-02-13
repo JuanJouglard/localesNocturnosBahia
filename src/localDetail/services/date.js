@@ -19,11 +19,11 @@ export default class DateService {
     );
   }
 
-  createDate(day, now, time) {
+  createDate(day, originalDate, time) {
     const dateToReturned = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
+      originalDate.getFullYear(),
+      originalDate.getMonth(),
+      originalDate.getDate(),
       time.hour,
       time.minute,
     );
