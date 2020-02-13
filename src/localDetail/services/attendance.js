@@ -29,11 +29,12 @@ export default class AttendanceService {
       });
   }
 
-  registerAttendanceToEvent(eventId) {
+  registerAttendanceToEvent(eventId, eventName) {
     return firestore()
       .collection('AttendanceEvents')
       .add({
         eventId: eventId,
+        eventName: eventName,
         userId: this.userService.getCurrentLoggedUser().uid,
       });
   }
