@@ -7,6 +7,18 @@ export const style = StyleSheet.create({
   assistance: {
     flex: 2,
   },
+  assistanceButton: {
+    alignSelf: 'center',
+    borderRadius: 8,
+    paddingBottom: 16,
+    paddingLeft: 64,
+    paddingRight: 64,
+    paddingTop: 16,
+  },
+  assistanceButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
   background: {
     height: '100%',
     paddingTop: 20,
@@ -21,6 +33,9 @@ export const style = StyleSheet.create({
   dates: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+  },
+  deleteButton: {
+    backgroundColor: '#ff5454',
   },
   disabled: {
     opacity: 0.5,
@@ -52,17 +67,7 @@ export const style = StyleSheet.create({
     fontSize: 42,
   },
   registerButton: {
-    alignSelf: 'center',
     backgroundColor: '#3378e0',
-    borderRadius: 8,
-    paddingBottom: 16,
-    paddingLeft: 64,
-    paddingRight: 64,
-    paddingTop: 16,
-  },
-  registerButtonText: {
-    color: 'white',
-    fontSize: 16,
   },
   robotoRegular: {
     fontFamily: 'Roboto-Regular',

@@ -33,9 +33,17 @@ export default class ActiveAssistance extends Component {
       .getActiveAttendance(userId)
       .then(([places, events]) => {
         const placesData = this.getDataFromArray(places.docs);
+        const placesDataWithRemove = this.addRemoveFunction(
+          placesData,
+          'Place',
+        );
         const eventsData = this.getDataFromArray(events.docs);
+        const eventsDataWithRemove = this.addRemoveFunction(
+          eventsData,
+          'Event',
+        );
         this.setState({
-          actives: placesData.concat(eventsData),
+          actives: placesDataWithRemove.concat(eventsDataWithRemove),
         });
       });
   };
@@ -43,6 +51,15 @@ export default class ActiveAssistance extends Component {
   getDataFromArray(array) {
     return array.map(attendance => {
       return {...attendance.data(), activeId: attendance.id};
+    });
+  }
+
+  addRemoveFunction(array, type) {
+    return array.map(item => {
+      return {
+        ...item,
+        removeEntry: this.attendanceService['removeAssistance' + type],
+      };
     });
   }
 
@@ -56,31 +73,34 @@ export default class ActiveAssistance extends Component {
   }
 
   renderItem = ({item}) => {
+    console.log(item);
     return (
       <ActiveAssistanceEntry
         item={item}
-        onPress={this.removeAssitance}></ActiveAssistanceEntry>
+        onPress={this.removeAssitance(item)}></ActiveAssistanceEntry>
     );
   };
 
-  removeAssitance = id => () => {
+  removeAssitance = item => () => {
     this.alertService.showConfirmationDialog(
       'Borrar',
       'Esta seguro que quiere borrar este registro?',
-      this.deleteEntry(id),
+      this.deleteEntry(item),
     );
   };
 
-  deleteEntry = id => () => {
-    this.attendanceService.removeAssitance(id).then(() => {
-      this.setState(prevState => {
-        const arrayWithoutElement = prevState.actives.filter(
-          active => active.activeId !== id,
-        );
-        return {actives: arrayWithoutElement};
+  deleteEntry = item => () => {
+    item
+      .removeEntry(item.activeId)()
+      .then(() => {
+        this.setState(prevState => {
+          const arrayWithoutElement = prevState.actives.filter(
+            active => active.activeId !== item.activeId,
+          );
+          return {actives: arrayWithoutElement};
+        });
+        this.toasterService.showToaster('Registro eliminado con exito');
       });
-      this.toasterService.showToaster('Registro eliminado con exito');
-    });
   };
 }
 ActiveAssistance.propTypes = {
