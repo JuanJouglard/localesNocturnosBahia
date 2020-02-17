@@ -1,6 +1,6 @@
 /* TODO: REFACTOR */
 import React, {Component} from 'react';
-import {View, Text, TimePickerAndroid, StyleSheet} from 'react-native';
+import {View, Text, TimePickerAndroid} from 'react-native';
 import DateService from '../services/date';
 import TimeStamp from './Time';
 import {
@@ -11,7 +11,8 @@ import {
 } from '../../shared';
 import AttendanceService from '../services/attendance';
 import {PropTypes} from 'prop-types';
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import {style} from './assistanceStyle';
+import {DetailButton} from './detailButton';
 export default class Assistance extends Component {
   dateService;
   attendanceService;
@@ -27,6 +28,7 @@ export default class Assistance extends Component {
     this.messageService = MessagesService.getInstance();
     this.toasterService = ToasterService.getInstance();
     this.state = {
+      activeId: null,
       endTime: null,
       hasActiveAttendance: true,
       startTime: null,
@@ -71,49 +73,62 @@ export default class Assistance extends Component {
               time={this.state.endTime?.toLocaleTimeString()}></TimeStamp>
           </View>
         </View>
-        <TouchableHighlight
-          style={
-            this.shouldDisableButton
-              ? [style.registerButton, style.disabled]
-              : style.registerButton
-          }
-          onPress={this.registerAssistance}
-          disabled={this.shouldDisableButton}>
-          <Text style={style.registerButtonText}>Registrar</Text>
-        </TouchableHighlight>
+        <DetailButton
+          onRegister={this.registerAssistance}
+          onDelete={this.deleteAssistance}
+          disabled={this.shouldDisableButton}
+          shouldDelete={this.state.hasActiveAttendance}></DetailButton>
       </View>
     );
   }
 
   get shouldDisableButton() {
-    return !this.state.startTime || !this.state.endTime;
+    return (
+      !this.state.startTime ||
+      !this.state.endTime ||
+      this.state.hasActiveAttendance
+    );
   }
 
-  registerAssistance = async () => {
+  performAction = (type, onConfirmation) => {
     this.alertService.showConfirmationDialog(
-      'Registrar asistencia',
-      this.getAlertMessage(),
+      'Confirmar',
+      this.getAlertMessage(type),
       async () =>
-        this.attendanceService
-          .registerAttendance(
-            this.props.item.id,
-            this.props.item.name,
-            this.state.startTime,
-            this.state.endTime,
-          )
-          .then(() => {
-            this.toasterService.showToaster('Asistencia registrada con exito');
-            this.refreshAttendance();
-          }),
+        onConfirmation().then(() => {
+          this.toasterService.showToaster('Operacion realizada con exito');
+          this.refreshAttendance();
+        }),
     );
   };
 
-  getAlertMessage = () => {
-    return this.messageService.getRegistrationMessage(
-      this.props.item.name,
-      this.state.startTime,
-      this.state.endTime,
+  registerAssistance = async () => {
+    this.performAction(
+      'register',
+      this.attendanceService.registerAttendance(
+        this.props.item.id,
+        this.props.item.name,
+        this.state.startTime,
+        this.state.endTime,
+      ),
     );
+  };
+
+  deleteAssistance = () => {
+    this.performAction(
+      'delete',
+      this.attendanceService.removeAssistancePlace(this.state.activeId),
+    );
+  };
+
+  getAlertMessage = type => {
+    if (type === 'register')
+      return this.messageService.getRegistrationMessage(
+        this.props.item.name,
+        this.state.startTime,
+        this.state.endTime,
+      );
+    else return this.messageService.getDeleteMessage(this.props.item.name);
   };
 
   openTimePicker = openClock => time => {
@@ -133,14 +148,21 @@ export default class Assistance extends Component {
     this.attendanceService
       .getActiveAttendanceByUserAndPlace(this.props.item.id)
       .then(response => {
+        let newState = {
+          endTime: null,
+          hasActiveAttendance: false,
+          startTime: null,
+        };
         if (response.docs.length) {
           const activeAttendance = response.docs[0].data();
-          this.setState({
+          newState = {
+            activeId: response.docs[0].id,
             endTime: activeAttendance.endTime.toDate(),
             hasActiveAttendance: true,
             startTime: activeAttendance.startTime.toDate(),
-          });
-        } else this.setState({hasActiveAttendance: false});
+          };
+        }
+        this.setState(newState);
       });
   }
 }
@@ -148,47 +170,3 @@ export default class Assistance extends Component {
 Assistance.propTypes = {
   item: PropTypes.object,
 };
-
-const style = StyleSheet.create({
-  assistance: {
-    flex: 1,
-    justifyContent: 'space-evenly',
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  marginBottom: {
-    marginBottom: 5,
-  },
-  registerButton: {
-    alignSelf: 'center',
-    backgroundColor: '#3378e0',
-    borderRadius: 8,
-    paddingBottom: 16,
-    paddingLeft: 64,
-    paddingRight: 64,
-    paddingTop: 16,
-  },
-  registerButtonText: {
-    color: 'white',
-    fontFamily: 'Roboto-Regular',
-    fontSize: 16,
-  },
-  robotoRegular: {
-    fontFamily: 'Roboto-Regular',
-  },
-  timePicker: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  timeStamps: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  titleText: {
-    fontFamily: 'Roboto-Light',
-    fontSize: 32,
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-});

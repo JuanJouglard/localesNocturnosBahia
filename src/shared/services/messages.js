@@ -14,4 +14,12 @@ export default class MessagesService {
   getConfirmationMessageForEvent(eventName) {
     return `Esta seguro/a que quiere confirmar la asistencia a ${eventName}`;
   }
+
+  getDeleteMessageForEvent(eventName) {
+    return `Esta seguro/a que quiere remover la asistencia a ${eventName}`;
+  }
+
+  getDeleteMessage(placeName) {
+    return `Esta seguro/a que quiere remover la asistencia a ${placeName}`;
+  }
 }
