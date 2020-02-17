@@ -1,6 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
-import {firebase} from '@react-native-firebase/auth';
 import {UserService} from '../../shared';
 export default class AttendanceService {
   static instance;
@@ -17,7 +16,7 @@ export default class AttendanceService {
     return this.instance;
   }
 
-  async registerAttendance(placeId, placeName, startTime, endTime) {
+  registerAttendance = (placeId, placeName, startTime, endTime) => () => {
     return firestore()
       .collection('Attendance')
       .add({
@@ -25,11 +24,11 @@ export default class AttendanceService {
         name: placeName,
         placeId: placeId,
         startTime: startTime,
-        userId: firebase.auth().currentUser.uid,
+        userId: this.userService.getCurrentLoggedUser().uid,
       });
-  }
+  };
 
-  registerAttendanceToEvent(eventId, eventName) {
+  registerAttendanceToEvent = (eventId, eventName) => () => {
     return firestore()
       .collection('AttendanceEvents')
       .add({
@@ -37,14 +36,21 @@ export default class AttendanceService {
         name: eventName,
         userId: this.userService.getCurrentLoggedUser().uid,
       });
-  }
+  };
 
-  async removeAssitance(id) {
+  removeAssistancePlace = id => () => {
     return firestore()
       .collection('Attendance')
       .doc(id)
       .delete();
-  }
+  };
+
+  removeAssistanceEvent = id => () => {
+    return firestore()
+      .collection('AttendanceEvents')
+      .doc(id)
+      .delete();
+  };
 
   getActiveAttendance(userId) {
     const placesAttendance = firestore()

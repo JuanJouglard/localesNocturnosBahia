@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {Text, TouchableHighlight, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {PropTypes} from 'prop-types';
 import {style} from '../details/eventDetailStyles';
 import TimeStamp from '../../../localDetail/components/Time';
 import Amount from './amount';
 import {AlertsService, ToasterService, MessagesService} from '../../../shared';
 import AttendanceService from '../../../localDetail/services/attendance';
+import {EventButton} from './button';
 
 export default class AssitanceToEvent extends Component {
   attendanceService;
@@ -21,6 +22,7 @@ export default class AssitanceToEvent extends Component {
     this.messageService = MessagesService.getInstance();
 
     this.state = {
+      activeId: null,
       hasActiveAttendance: true,
     };
   }
@@ -57,34 +59,51 @@ export default class AssitanceToEvent extends Component {
           </View>
         </View>
         <Amount quantity={this.props.item.people}></Amount>
-        <TouchableHighlight
-          disabled={this.state.hasActiveAttendance}
-          style={[
-            style.registerButton,
-            this.state.hasActiveAttendance ? style.disabled : null,
-          ]}
-          onPress={this.registerAttendanceToEvent}>
-          <Text style={[style.registerButtonText, style.robotoRegular]}>
-            Asistir
-          </Text>
-        </TouchableHighlight>
+        <EventButton
+          onRegister={this.registerAttendanceToEvent}
+          onDelete={this.deleteAttendanceToEvent}
+          shouldDelete={this.state.hasActiveAttendance}></EventButton>
       </View>
     );
   }
 
-  registerAttendanceToEvent = () => {
+  performAction = (type, onConfirmation) => {
     this.alertService.showConfirmationDialog(
       'Confirmar',
-      this.messageService.getConfirmationMessageForEvent(this.props.item.name),
+      this.getAlertMessage(),
       () => {
-        this.attendanceService
-          .registerAttendanceToEvent(this.props.item.id, this.props.item.name)
-          .then(() => {
-            this.toasterService.showToaster('Asistencia registrada con exito');
-            this.props.item.refreshAttendance().then(() => this.forceUpdate());
-            this.refreshAttendance();
-          });
+        onConfirmation().then(() => {
+          this.toasterService.showToaster('Operacion realizada con exito');
+          this.props.item.refreshAttendance().then(() => this.forceUpdate());
+          this.refreshAttendance();
+        });
       },
+    );
+  };
+
+  getAlertMessage(type) {
+    if (type === 'register')
+      return this.messageService.getConfirmationMessageForEvent(
+        this.props.item.name,
+      );
+    else
+      return this.messageService.getDeleteMessageForEvent(this.props.item.name);
+  }
+
+  registerAttendanceToEvent = () => {
+    this.performAction(
+      'register',
+      this.attendanceService.registerAttendanceToEvent(
+        this.props.item.id,
+        this.props.item.name,
+      ),
+    );
+  };
+
+  deleteAttendanceToEvent = () => {
+    this.performAction(
+      'delete',
+      this.attendanceService.removeAssistanceEvent(this.state.activeId),
     );
   };
 
@@ -92,7 +111,10 @@ export default class AssitanceToEvent extends Component {
     this.attendanceService
       .getEventAttendanceByUserId(this.props.item.id)
       .then(response => {
-        this.setState({hasActiveAttendance: !!response.docs.length});
+        this.setState({
+          activeId: response.docs[0]?.id,
+          hasActiveAttendance: !!response.docs.length,
+        });
       });
   }
 }

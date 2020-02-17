@@ -9,6 +9,7 @@ import firestore from '@react-native-firebase/firestore';
 export default class ActiveAssistanceEntry extends Component {
   constructor(props) {
     super(props);
+    console.log('props', props);
   }
 
   render() {
@@ -21,8 +22,7 @@ export default class ActiveAssistanceEntry extends Component {
         <View style={style.timeStamps}>
           {this.getTimeStamps(this.props.item.endTime)}
         </View>
-        <TouchableOpacity
-          onPress={this.props.onPress(this.props.item.activeId)}>
+        <TouchableOpacity onPress={this.props.onPress}>
           <FontAwesomeIcon
             icon={faTrashAlt}
             size={32}
