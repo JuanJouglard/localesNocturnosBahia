@@ -22,7 +22,10 @@ export default class Occupancy extends Component {
         <View style={style.container}>
           <View>
             <Clock onPress={this.selectTime}>
-              <Text>Seleccionar Horario</Text>
+              {(() => {
+                if (!this.state.selectedDate)
+                  return <Text>Seleccionar Horario</Text>;
+              })()}
             </Clock>
             <TimeStamp
               date={this.state.selectedDate?.toLocaleDateString()}
