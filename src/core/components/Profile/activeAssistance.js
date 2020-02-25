@@ -84,7 +84,7 @@ export default class ActiveAssistance extends Component {
   removeAssitance = item => () => {
     this.alertService.showConfirmationDialog(
       'Borrar',
-      'Esta seguro que quiere borrar este registro?',
+      'Esta seguro/a que quiere borrar este registro?',
       this.deleteEntry(item),
     );
   };
