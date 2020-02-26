@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {GoogleSignin} from 'react-native-google-signin';
 import {firebase} from '@react-native-firebase/auth';
 import Main from './src/core/components/Main/Main';
 import {UserService} from './src/shared';
@@ -18,11 +17,6 @@ export default class App extends Component {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({isLoggedIn: !!user});
     });
-  }
-
-  async componentWillUnmount() {
-    await firebase.auth().signOut();
-    await GoogleSignin.signOut();
   }
 
   render() {

@@ -15,7 +15,7 @@ export const routes = [
 
 export function componentToRoute(route) {
   return (
-    <View>
+    <View style={style.container}>
       <SearchInput
         section={route.title}
         onInput={this.filterArray(route.key)}></SearchInput>
@@ -32,6 +32,9 @@ export function componentToRoute(route) {
 }
 
 const style = StyleSheet.create({
+  container: {
+    maxHeight: '100%',
+  },
   list: {
     height: '100%',
     width: '100%',
