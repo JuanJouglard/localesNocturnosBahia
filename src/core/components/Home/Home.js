@@ -73,7 +73,6 @@ Home.propTypes = {
 
 const style = StyleSheet.create({
   list: {
-    height: '100%',
     width: '100%',
   },
   tabs: {

@@ -9,7 +9,6 @@ import firestore from '@react-native-firebase/firestore';
 export default class ActiveAssistanceEntry extends Component {
   constructor(props) {
     super(props);
-    console.log('props', props);
   }
 
   render() {
@@ -33,11 +32,7 @@ export default class ActiveAssistanceEntry extends Component {
   }
 
   getTimeStamps(time) {
-    if (time)
-      return (
-        <Time
-          time={this.convertTimeStampToDate(this.props.item.startTime)}></Time>
-      );
+    if (time) return <Time time={this.convertTimeStampToDate(time)}></Time>;
   }
 
   convertTimeStampToDate(timestamp) {
