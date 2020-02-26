@@ -24,7 +24,9 @@ export default class Occupancy extends Component {
             <Clock onPress={this.selectTime}>
               {(() => {
                 if (!this.state.selectedDate)
-                  return <Text>Seleccionar Horario</Text>;
+                  return (
+                    <Text style={{marginBottom: 5}}>Seleccionar Horario</Text>
+                  );
               })()}
             </Clock>
             <TimeStamp
