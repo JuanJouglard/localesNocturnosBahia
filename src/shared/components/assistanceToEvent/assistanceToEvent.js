@@ -73,7 +73,7 @@ export default class AssitanceToEvent extends Component {
       this.getAlertMessage(),
       () => {
         onConfirmation().then(() => {
-          this.toasterService.showToaster('Operacion realizada con exito');
+          this.toasterService.showToaster('Operacion realizada con éxito');
           this.props.item.refreshAttendance().then(() => this.forceUpdate());
           this.refreshAttendance();
         });

@@ -84,7 +84,7 @@ export default class ActiveAssistance extends Component {
   removeAssitance = item => () => {
     this.alertService.showConfirmationDialog(
       'Borrar',
-      'Esta seguro/a que quiere borrar este registro?',
+      'Esta seguro/a que quiere borrar esta asistencia?',
       this.deleteEntry(item),
     );
   };
@@ -99,7 +99,7 @@ export default class ActiveAssistance extends Component {
           );
           return {actives: arrayWithoutElement};
         });
-        this.toasterService.showToaster('Registro eliminado con exito');
+        this.toasterService.showToaster('Registro eliminado con éxito');
       });
   };
 }
