@@ -96,7 +96,7 @@ export default class Assistance extends Component {
       this.getAlertMessage(type),
       async () =>
         onConfirmation().then(() => {
-          this.toasterService.showToaster('Operacion realizada con exito');
+          this.toasterService.showToaster('Operacion realizada con éxito');
           this.refreshAttendance();
         }),
     );
