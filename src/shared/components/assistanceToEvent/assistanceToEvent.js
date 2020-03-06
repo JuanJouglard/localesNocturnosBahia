@@ -70,7 +70,7 @@ export default class AssitanceToEvent extends Component {
   performAction = (type, onConfirmation) => {
     this.alertService.showConfirmationDialog(
       'Confirmar',
-      this.getAlertMessage(),
+      this.getAlertMessage(type),
       () => {
         onConfirmation().then(() => {
           this.toasterService.showToaster('Operacion realizada con éxito');
